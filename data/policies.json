@@ -1,0 +1,42 @@
+[
+  {
+    "policy_id": "P1",
+    "document_type": "public_notice",
+    "min_clearance": 0,
+    "allowed_roles": ["*"],
+    "allowed_departments": ["*"],
+    "enforce_mission_match": false
+  },
+  {
+    "policy_id": "P2",
+    "document_type": "personnel_document",
+    "min_clearance": 1,
+    "allowed_roles": ["personnel_staff"],
+    "allowed_departments": ["personnel"],
+    "enforce_mission_match": true
+  },
+  {
+    "policy_id": "P3",
+    "document_type": "operations_document",
+    "min_clearance": 2,
+    "allowed_roles": ["operations_staff"],
+    "allowed_departments": ["operations"],
+    "enforce_mission_match": true
+  },
+  {
+    "policy_id": "P4",
+    "document_type": "security_log",
+    "min_clearance": 2,
+    "allowed_roles": ["security_admin"],
+    "allowed_departments": ["security"],
+    "enforce_mission_match": true
+  },
+  {
+    "policy_id": "P5",
+    "document_type": "vulnerability_report",
+    "min_clearance": 3,
+    "allowed_roles": ["security_admin"],
+    "allowed_departments": ["security"],
+    "enforce_mission_match": true
+  }
+]
