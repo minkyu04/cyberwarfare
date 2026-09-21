@@ -1,1 +1,34 @@
-
+[
+  {
+    "user_id": "U1",
+    "role": "general_user",
+    "department": "administration",
+    "clearance": 0,
+    "mission": "NONE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "U2",
+    "role": "personnel_staff",
+    "department": "personnel",
+    "clearance": 1,
+    "mission": "ADMIN",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "U3",
+    "role": "operations_staff",
+    "department": "operations",
+    "clearance": 2,
+    "mission": "BLUE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "U4",
+    "role": "security_admin",
+    "department": "security",
+    "clearance": 3,
+    "mission": "CYBER",
+    "temporary_authorization": false
+  }
+]
