@@ -72,9 +72,14 @@ def is_allowed(user_id, document_id):
     document = get_document(document_id)
     policy = get_policy(document["document_type"])
 
-    # 1. 최소 인가수준 검사
-    if user["clearance"] < policy["min_clearance"]:
-        return False
+   # 1. 최소 인가수준 및 문서 등급 검사
+    required_clearance = max(
+        policy["min_clearance"],
+        document["classification"]
+    )
+    
+    if user["clearance"] < required_clearance:
+    return False
 
     # 2. 역할 검사
     if not matches(user["role"], policy["allowed_roles"]):
