@@ -79,7 +79,7 @@ def is_allowed(user_id, document_id):
     )
     
     if user["clearance"] < required_clearance:
-    return False
+        return False
 
     # 2. 역할 검사
     if not matches(user["role"], policy["allowed_roles"]):
