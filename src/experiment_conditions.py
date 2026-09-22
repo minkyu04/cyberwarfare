@@ -417,10 +417,23 @@ class ExperimentRunner:
             "condition": condition,
             "user_id": user_id,
             "question": question,
+            
             "retrieved_documents": [
                 result["document_id"]
                 for result in results
             ],
+            
+            "retrieval_scores": [
+                {
+                    "document_id":
+                    result["document_id"],
+                    
+                    "score":
+                    result["score"]
+                }
+                for result in results
+            ],
+            
             "response": response
         }
 
@@ -470,6 +483,11 @@ if __name__ == "__main__":
         print(
             "Retrieved:",
             result["retrieved_documents"]
+        )
+
+        print(
+            "Scores:",
+            result["retrieval_scores"]
         )
 
         print(
