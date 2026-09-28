@@ -1,0 +1,58 @@
+
+[
+  {
+    "rule_id": "IR-001",
+    "description": "BLUE 훈련 일정과 장비 점검 현황의 결합",
+    "required_facts": [
+      "OPS001-F2",
+      "OPS002-F2"
+    ],
+    "derived_fact": "BLUE 임무의 훈련일 및 장비 점검률 종합정보",
+    "required_clearance": 3,
+    "allowed_missions": ["BLUE"]
+  },
+  {
+    "rule_id": "IR-002",
+    "description": "BLUE 훈련 일정과 추가 확인 대상의 결합",
+    "required_facts": [
+      "OPS001-F2",
+      "OPS002-F3"
+    ],
+    "derived_fact": "BLUE 임무의 훈련일 및 추가 확인 대상 종합정보",
+    "required_clearance": 3,
+    "allowed_missions": ["BLUE"]
+  },
+  {
+    "rule_id": "IR-003",
+    "description": "복수 인사문서의 대상자 정보 결합",
+    "required_facts": [
+      "PER001-F2",
+      "PER002-F2"
+    ],
+    "derived_fact": "두 인사심사 대상자의 통합 명단",
+    "required_clearance": 2,
+    "allowed_missions": ["ADMIN"]
+  },
+  {
+    "rule_id": "IR-004",
+    "description": "복수 보안로그의 탐지정보 결합",
+    "required_facts": [
+      "LOG001-F3",
+      "LOG002-F3"
+    ],
+    "derived_fact": "두 보안 이벤트의 탐지 시각 및 인증실패 현황",
+    "required_clearance": 3,
+    "allowed_missions": ["CYBER"]
+  },
+  {
+    "rule_id": "IR-005",
+    "description": "복수 시스템의 취약점 정보 결합",
+    "required_facts": [
+      "VUL001-F3",
+      "VUL002-F3"
+    ],
+    "derived_fact": "ORION-K7 및 HELIOS-R2의 통합 취약점 현황",
+    "required_clearance": 3,
+    "allowed_missions": ["CYBER_COMMAND"]
+  }
+]
