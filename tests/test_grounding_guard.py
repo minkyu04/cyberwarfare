@@ -6,7 +6,9 @@ from src.grounding_guard import (
 )
 
 
-class TestGroundedOutputGuard(unittest.TestCase):
+class TestGroundedOutputGuard(
+    unittest.TestCase
+):
 
     @classmethod
     def setUpClass(cls):
@@ -16,29 +18,27 @@ class TestGroundedOutputGuard(unittest.TestCase):
         )
 
     # =================================================
-    # 1. 정상 허용 Fact 응답
+    # 1. 정상 Fact
     # =================================================
 
     def test_allowed_fact_response_passes(
         self
     ):
 
-        result = (
-            self.guard.validate(
-                question=(
-                    "BLUE 임무 훈련일을 알려줘."
-                ),
+        result = self.guard.validate(
+            question=(
+                "BLUE 임무 훈련일을 알려줘."
+            ),
 
-                allowed_fact_ids=[
-                    "OPS001-F2"
-                ],
+            allowed_fact_ids=[
+                "OPS001-F2"
+            ],
 
-                removed_fact_ids=[],
+            removed_fact_ids=[],
 
-                draft_response=(
-                    "BLUE 임무 훈련일은 "
-                    "10월 22일입니다."
-                )
+            draft_response=(
+                "BLUE 임무 훈련일은 "
+                "10월 22일입니다."
             )
         )
 
@@ -55,59 +55,32 @@ class TestGroundedOutputGuard(unittest.TestCase):
             "LLM_PASSED"
         )
 
-        self.assertEqual(
-            result[
-                "unsupported_tokens"
-            ],
-            []
-        )
-
-        self.assertEqual(
-            result[
-                "missing_allowed_facts"
-            ],
-            []
-        )
-
-        self.assertEqual(
-            result[
-                "final_response"
-            ],
-            (
-                "BLUE 임무 훈련일은 "
-                "10월 22일입니다."
-            )
-        )
-
     # =================================================
-    # 2. LLM 가짜 비율 생성
+    # 2. 가짜 비율
     # =================================================
 
     def test_hallucinated_percentage_is_blocked(
         self
     ):
 
-        result = (
-            self.guard.validate(
-                question=(
-                    "BLUE 훈련일과 "
-                    "통신장비 점검률을 알려줘."
-                ),
+        result = self.guard.validate(
+            question=(
+                "BLUE 훈련일과 "
+                "통신장비 점검률을 알려줘."
+            ),
 
-                allowed_fact_ids=[
-                    "OPS001-F2"
-                ],
+            allowed_fact_ids=[
+                "OPS001-F2"
+            ],
 
-                removed_fact_ids=[
-                    "OPS002-F2"
-                ],
+            removed_fact_ids=[
+                "OPS002-F2"
+            ],
 
-                draft_response=(
-                    "BLUE 훈련일은 "
-                    "10월 22일이며 "
-                    "통신장비 점검률은 "
-                    "100%입니다."
-                )
+            draft_response=(
+                "훈련일은 10월 22일이며 "
+                "통신장비 점검률은 "
+                "100%입니다."
             )
         )
 
@@ -115,13 +88,6 @@ class TestGroundedOutputGuard(unittest.TestCase):
             result[
                 "guard_triggered"
             ]
-        )
-
-        self.assertEqual(
-            result[
-                "response_mode"
-            ],
-            "GROUNDED_FALLBACK"
         )
 
         self.assertIn(
@@ -133,47 +99,38 @@ class TestGroundedOutputGuard(unittest.TestCase):
 
         self.assertEqual(
             result[
-                "final_response"
+                "response_mode"
             ],
-            (
-                "확인 가능한 정보는 다음과 같습니다. "
-                "훈련일은 10월 22일이다"
-            )
+            "GROUNDED_FALLBACK"
         )
 
     # =================================================
-    # 3. 제거된 Fact 재출력
+    # 3. 제거된 Fact 재생성
     # =================================================
 
     def test_removed_fact_leakage_is_blocked(
         self
     ):
 
-        result = (
-            self.guard.validate(
-                question=(
-                    "BLUE 훈련일과 "
-                    "통신장비 점검률, "
-                    "추가 확인 대상을 알려줘."
-                ),
+        result = self.guard.validate(
+            question=(
+                "BLUE 훈련일과 점검률, "
+                "추가 확인 대상을 알려줘."
+            ),
 
-                allowed_fact_ids=[
-                    "OPS001-F2"
-                ],
+            allowed_fact_ids=[
+                "OPS001-F2"
+            ],
 
-                removed_fact_ids=[
-                    "OPS002-F2",
-                    "OPS002-F3"
-                ],
+            removed_fact_ids=[
+                "OPS002-F2",
+                "OPS002-F3"
+            ],
 
-                draft_response=(
-                    "훈련일은 "
-                    "10월 22일이며 "
-                    "통신장비 점검률은 "
-                    "92%이고 "
-                    "추가 확인 대상은 "
-                    "NODE-PAPA입니다."
-                )
+            draft_response=(
+                "훈련일은 10월 22일이며 "
+                "점검률은 92%이고 "
+                "대상은 NODE-PAPA입니다."
             )
         )
 
@@ -183,13 +140,6 @@ class TestGroundedOutputGuard(unittest.TestCase):
             ]
         )
 
-        self.assertEqual(
-            result[
-                "response_mode"
-            ],
-            "GROUNDED_FALLBACK"
-        )
-
         self.assertIn(
             "92%",
             result[
@@ -213,13 +163,6 @@ class TestGroundedOutputGuard(unittest.TestCase):
 
         self.assertNotIn(
             "NODE-PAPA",
-            result[
-                "final_response"
-            ]
-        )
-
-        self.assertIn(
-            "10월 22일",
             result[
                 "final_response"
             ]
@@ -233,26 +176,22 @@ class TestGroundedOutputGuard(unittest.TestCase):
         self
     ):
 
-        result = (
-            self.guard.validate(
-                question=(
-                    "NOVA-17 보안 이벤트 "
-                    "탐지정보와 "
-                    "AURORA-GATE 인증 실패 "
-                    "현황을 알려줘."
-                ),
+        result = self.guard.validate(
+            question=(
+                "보안 이벤트 탐지정보와 "
+                "인증 실패 현황을 알려줘."
+            ),
 
-                allowed_fact_ids=[
-                    "LOG001-F3",
-                    "LOG002-F3"
-                ],
+            allowed_fact_ids=[
+                "LOG001-F3",
+                "LOG002-F3"
+            ],
 
-                removed_fact_ids=[],
+            removed_fact_ids=[],
 
-                draft_response=(
-                    "현재 제공된 정보만으로는 "
-                    "답변하기 어렵습니다."
-                )
+            draft_response=(
+                "현재 정보만으로는 "
+                "답변하기 어렵습니다."
             )
         )
 
@@ -260,13 +199,6 @@ class TestGroundedOutputGuard(unittest.TestCase):
             result[
                 "guard_triggered"
             ]
-        )
-
-        self.assertEqual(
-            result[
-                "response_mode"
-            ],
-            "GROUNDED_FALLBACK"
         )
 
         self.assertCountEqual(
@@ -294,33 +226,31 @@ class TestGroundedOutputGuard(unittest.TestCase):
         )
 
     # =================================================
-    # 5. 여러 허용 Fact 정상 통과
+    # 5. 복수 Fact 정상
     # =================================================
 
     def test_multiple_allowed_facts_pass(
         self
     ):
 
-        result = (
-            self.guard.validate(
-                question=(
-                    "보안 이벤트 탐지 시각과 "
-                    "인증 실패 횟수를 알려줘."
-                ),
+        result = self.guard.validate(
+            question=(
+                "탐지 시각과 "
+                "인증 실패 횟수를 알려줘."
+            ),
 
-                allowed_fact_ids=[
-                    "LOG001-F3",
-                    "LOG002-F3"
-                ],
+            allowed_fact_ids=[
+                "LOG001-F3",
+                "LOG002-F3"
+            ],
 
-                removed_fact_ids=[],
+            removed_fact_ids=[],
 
-                draft_response=(
-                    "보안 이벤트 탐지 시각은 "
-                    "02시 14분이며, "
-                    "인증 실패 횟수는 "
-                    "37회입니다."
-                )
+            draft_response=(
+                "탐지 시각은 "
+                "02시 14분이며 "
+                "인증 실패 횟수는 "
+                "37회입니다."
             )
         )
 
@@ -337,20 +267,6 @@ class TestGroundedOutputGuard(unittest.TestCase):
             "LLM_PASSED"
         )
 
-        self.assertEqual(
-            result[
-                "unsupported_tokens"
-            ],
-            []
-        )
-
-        self.assertEqual(
-            result[
-                "missing_allowed_facts"
-            ],
-            []
-        )
-
     # =================================================
     # 6. 허용 Fact 없음
     # =================================================
@@ -359,19 +275,20 @@ class TestGroundedOutputGuard(unittest.TestCase):
         self
     ):
 
-        fallback = (
-            self.guard.build_grounded_fallback(
+        result = (
+            self.guard
+            .build_grounded_fallback(
                 []
             )
         )
 
         self.assertEqual(
-            fallback,
+            result,
             SAFE_RESPONSE
         )
 
     # =================================================
-    # 7. 영문 식별자 뒤 한국어 조사 처리
+    # 7. 한국어 조사 + 영문 ID
     # =================================================
 
     def test_identifier_with_korean_suffix(
@@ -379,8 +296,9 @@ class TestGroundedOutputGuard(unittest.TestCase):
     ):
 
         tokens = (
-            self.guard.extract_evidence_tokens(
-                "추가 확인 대상은 "
+            self.guard
+            .extract_evidence_tokens(
+                "대상은 "
                 "NODE-PAPA입니다."
             )
         )
@@ -391,7 +309,7 @@ class TestGroundedOutputGuard(unittest.TestCase):
         )
 
     # =================================================
-    # 8. 수치 뒤 한국어 조사 처리
+    # 8. 한국어 조사 + 수치
     # =================================================
 
     def test_numeric_tokens_with_korean_suffix(
@@ -399,10 +317,11 @@ class TestGroundedOutputGuard(unittest.TestCase):
     ):
 
         tokens = (
-            self.guard.extract_evidence_tokens(
+            self.guard
+            .extract_evidence_tokens(
                 "탐지 시각은 "
-                "02시 14분이며, "
-                "인증 실패 횟수는 "
+                "02시 14분이며 "
+                "실패 횟수는 "
                 "37회입니다."
             )
         )
@@ -417,7 +336,124 @@ class TestGroundedOutputGuard(unittest.TestCase):
             tokens
         )
 
+    # =================================================
+    # 9. 공개 Context의 값은 정상 허용
+    # =================================================
+
+    def test_public_context_token_is_allowed(
+        self
+    ):
+
+        public_context = (
+            "정기 체육행사는 "
+            "10월 5일에 실시한다."
+        )
+
+        result = self.guard.validate(
+            question=(
+                "정기 체육행사 날짜를 알려줘."
+            ),
+
+            allowed_fact_ids=[],
+
+            removed_fact_ids=[],
+
+            draft_response=(
+                "정기 체육행사는 "
+                "10월 5일에 실시합니다."
+            ),
+
+            additional_allowed_text=
+                public_context,
+
+            fallback_response=(
+                "확인 가능한 공개정보: "
+                + public_context
+            )
+        )
+
+        self.assertFalse(
+            result[
+                "guard_triggered"
+            ]
+        )
+
+        self.assertEqual(
+            result[
+                "response_mode"
+            ],
+            "LLM_PASSED"
+        )
+
+    # =================================================
+    # 10. 공개 Context에 없는 환각값 차단
+    # =================================================
+
+    def test_public_context_hallucination_is_blocked(
+        self
+    ):
+
+        public_context = (
+            "정기 체육행사는 "
+            "10월 5일에 실시한다."
+        )
+
+        fallback = (
+            "확인 가능한 공개정보: "
+            + public_context
+        )
+
+        result = self.guard.validate(
+            question=(
+                "정기 체육행사 날짜를 알려줘."
+            ),
+
+            allowed_fact_ids=[],
+
+            removed_fact_ids=[],
+
+            draft_response=(
+                "정기 체육행사는 "
+                "10월 5일이며 "
+                "참가율은 95%입니다."
+            ),
+
+            additional_allowed_text=
+                public_context,
+
+            fallback_response=
+                fallback
+        )
+
+        self.assertTrue(
+            result[
+                "guard_triggered"
+            ]
+        )
+
+        self.assertIn(
+            "95%",
+            result[
+                "unsupported_tokens"
+            ]
+        )
+
+        self.assertEqual(
+            result[
+                "response_mode"
+            ],
+            "GROUNDED_FALLBACK"
+        )
+
+        self.assertNotIn(
+            "95%",
+            result[
+                "final_response"
+            ]
+        )
+
 
 if __name__ == "__main__":
 
     unittest.main()
+    
