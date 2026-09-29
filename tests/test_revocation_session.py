@@ -22,8 +22,6 @@ class TestRevocationAwareSession(
 
     def setUp(self):
 
-        # 각 테스트가 독립된 Session 상태를 갖도록
-        # 매 테스트마다 새 Manager 생성
         self.manager = (
             RevocationAwareSessionManager(
                 self.controller
@@ -31,16 +29,17 @@ class TestRevocationAwareSession(
         )
 
     # =================================================
-    # 1. 임시권한 활성 중 공개된 Fact 기록
+    # 공통 임시권한 공개 함수
     # =================================================
 
-    def test_temporary_disclosure_is_recorded(
-        self
+    def record_temp_combination(
+        self,
+        session_id
     ):
 
         self.manager.record_disclosure(
             session_id=
-                "S1",
+                session_id,
 
             user_id=
                 "U3",
@@ -61,6 +60,18 @@ class TestRevocationAwareSession(
                 "2026-09-29T10:00:00"
                 "+09:00"
             )
+        )
+
+    # =================================================
+    # 1. 임시 공개 기록
+    # =================================================
+
+    def test_temporary_disclosure_is_recorded(
+        self
+    ):
+
+        self.record_temp_combination(
+            "S1"
         )
 
         snapshot = (
@@ -89,44 +100,16 @@ class TestRevocationAwareSession(
             ]
         )
 
-        self.assertEqual(
-            snapshot[
-                "revoked_fact_ids"
-            ],
-            []
-        )
-
     # =================================================
-    # 2. 임시권한에 의존한 Rule 기록
+    # 2. 임시 Rule 의존성 기록
     # =================================================
 
     def test_temporary_rule_dependency_is_recorded(
         self
     ):
 
-        self.manager.record_disclosure(
-            session_id=
-                "S2",
-
-            user_id=
-                "U3",
-
-            disclosed_fact_ids=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            exposed_facts_before=[],
-
-            candidate_facts=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            as_of=(
-                "2026-09-29T10:00:00"
-                "+09:00"
-            )
+        self.record_temp_combination(
+            "S2"
         )
 
         snapshot = (
@@ -139,73 +122,34 @@ class TestRevocationAwareSession(
                     "U3",
 
                 as_of=(
-                    "2026-09-29T10:00:00"
+                    "2026-09-29T10:30:00"
                     "+09:00"
                 )
             )
         )
 
-        events = snapshot[
-            "exposure_events"
-        ]
-
-        self.assertEqual(
-            len(events),
-            2
+        self.assertIn(
+            "IR-001",
+            snapshot[
+                "temporary_rule_ids"
+            ]
         )
 
-        for event in events:
-
-            self.assertIn(
-                "IR-001",
-                event[
-                    "temporary_rule_ids"
-                ]
-            )
-
-            self.assertIn(
-                "TA-001",
-                event[
-                    "active_authorization_ids"
-                ]
-            )
-
     # =================================================
-    # 3. 임시권한 활성 중에는 재사용 가능
+    # 3. 활성 중에는 Rule 회수 없음
     # =================================================
 
-    def test_fact_reusable_during_authorization(
+    def test_rule_not_revoked_while_active(
         self
     ):
 
-        self.manager.record_disclosure(
-            session_id=
-                "S3",
-
-            user_id=
-                "U3",
-
-            disclosed_fact_ids=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            exposed_facts_before=[],
-
-            candidate_facts=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            as_of=(
-                "2026-09-29T10:00:00"
-                "+09:00"
-            )
+        self.record_temp_combination(
+            "S3"
         )
 
         revoked = (
             self.manager
-            .get_revoked_fact_ids(
+            .get_revoked_rule_ids(
                 session_id=
                     "S3",
 
@@ -225,41 +169,20 @@ class TestRevocationAwareSession(
         )
 
     # =================================================
-    # 4. 권한 만료 후 Session reuse 회수
+    # 4. 만료 후 Rule 회수
     # =================================================
 
-    def test_fact_revoked_after_expiration(
+    def test_rule_revoked_after_expiration(
         self
     ):
 
-        self.manager.record_disclosure(
-            session_id=
-                "S4",
-
-            user_id=
-                "U3",
-
-            disclosed_fact_ids=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            exposed_facts_before=[],
-
-            candidate_facts=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            as_of=(
-                "2026-09-29T10:00:00"
-                "+09:00"
-            )
+        self.record_temp_combination(
+            "S4"
         )
 
         revoked = (
             self.manager
-            .get_revoked_fact_ids(
+            .get_revoked_rule_ids(
                 session_id=
                     "S4",
 
@@ -273,45 +196,23 @@ class TestRevocationAwareSession(
             )
         )
 
-        self.assertCountEqual(
+        self.assertEqual(
             revoked,
             [
-                "OPS001-F2",
-                "OPS002-F2"
+                "IR-001"
             ]
         )
 
     # =================================================
-    # 5. 회수돼도 Exposure History는 삭제하지 않음
+    # 5. Rule이 회수돼도 Exposure History 유지
     # =================================================
 
     def test_revocation_does_not_erase_history(
         self
     ):
 
-        self.manager.record_disclosure(
-            session_id=
-                "S5",
-
-            user_id=
-                "U3",
-
-            disclosed_fact_ids=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            exposed_facts_before=[],
-
-            candidate_facts=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            as_of=(
-                "2026-09-29T10:00:00"
-                "+09:00"
-            )
+        self.record_temp_combination(
+            "S5"
         )
 
         snapshot = (
@@ -330,13 +231,12 @@ class TestRevocationAwareSession(
             )
         )
 
-        self.assertCountEqual(
+        self.assertEqual(
             snapshot[
-                "revoked_fact_ids"
+                "revoked_rule_ids"
             ],
             [
-                "OPS001-F2",
-                "OPS002-F2"
+                "IR-001"
             ]
         )
 
@@ -351,50 +251,29 @@ class TestRevocationAwareSession(
         )
 
     # =================================================
-    # 6. 회수 Fact가 Candidate에 다시 등장하면 차단
+    # 6. 만료 후 개별 안전 Fact 재요청은 허용
     # =================================================
 
-    def test_revoked_candidate_is_blocked(
+    def test_single_safe_fact_allowed_after_expiration(
         self
     ):
 
-        self.manager.record_disclosure(
-            session_id=
-                "S6",
-
-            user_id=
-                "U3",
-
-            disclosed_fact_ids=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            exposed_facts_before=[],
-
-            candidate_facts=[
-                "OPS001-F2",
-                "OPS002-F2"
-            ],
-
-            as_of=(
-                "2026-09-29T10:00:00"
-                "+09:00"
-            )
-        )
+        history = [
+            "OPS001-F2",
+            "OPS002-F2"
+        ]
 
         result = (
-            self.manager
-            .filter_revoked_candidates(
-                session_id=
-                    "S6",
-
+            self.controller
+            .evaluate_turn(
                 user_id=
                     "U3",
 
-                candidate_fact_ids=[
-                    "OPS001-F2",
-                    "OPS002-F2"
+                exposed_facts=
+                    history,
+
+                candidate_facts=[
+                    "OPS001-F2"
                 ],
 
                 as_of=(
@@ -406,36 +285,127 @@ class TestRevocationAwareSession(
 
         self.assertEqual(
             result[
-                "reusable_candidate_facts"
+                "current_response_violations"
             ],
             []
         )
 
-        self.assertCountEqual(
+        self.assertEqual(
             result[
-                "revoked_reuse_facts"
+                "removed_facts"
+            ],
+            []
+        )
+
+        self.assertEqual(
+            result[
+                "allowed_facts"
             ],
             [
-                "OPS001-F2",
-                "OPS002-F2"
+                "OPS001-F2"
             ]
         )
 
     # =================================================
-    # 7. 임시권한과 무관한 공개는 회수하지 않음
+    # 7. 만료 후 금지조합 전체 재요청 시 선택적 제거
     # =================================================
 
-    def test_normal_disclosure_is_not_revoked(
+    def test_combination_replay_is_minimized_after_expiration(
         self
     ):
 
-        # OPS001-F2 하나만 공개하는 것은
-        # IR-001을 완성하지 않으므로
-        # 임시권한에 의존한 공개가 아니다.
+        history = [
+            "OPS001-F2",
+            "OPS002-F2"
+        ]
+
+        result = (
+            self.controller
+            .evaluate_turn(
+                user_id=
+                    "U3",
+
+                exposed_facts=
+                    history,
+
+                candidate_facts=[
+                    "OPS001-F2",
+                    "OPS002-F2"
+                ],
+
+                as_of=(
+                    "2026-09-29T12:30:00"
+                    "+09:00"
+                )
+            )
+        )
+
+        self.assertIn(
+            "IR-001",
+            result[
+                "preexisting_violations"
+            ]
+        )
+
+        self.assertIn(
+            "IR-001",
+            result[
+                "current_response_violations"
+            ]
+        )
+
+        # 업무가치:
+        #
+        # OPS001-F2 = 8
+        # OPS002-F2 = 2
+        #
+        # 둘 중 하나만 제거하면 되므로
+        # 업무손실이 작은 OPS002-F2를 제거한다.
+
+        self.assertEqual(
+            result[
+                "removed_facts"
+            ],
+            [
+                "OPS002-F2"
+            ]
+        )
+
+        self.assertEqual(
+            result[
+                "allowed_facts"
+            ],
+            [
+                "OPS001-F2"
+            ]
+        )
+
+        self.assertEqual(
+            result[
+                "removed_utility"
+            ],
+            2.0
+        )
+
+        self.assertEqual(
+            result[
+                "retained_utility"
+            ],
+            8.0
+        )
+
+    # =================================================
+    # 8. 임시권한과 무관한 단독 공개는
+    #    Temporary Rule로 기록하지 않음
+    # =================================================
+
+    def test_normal_disclosure_has_no_temporary_rule(
+        self
+    ):
 
         self.manager.record_disclosure(
             session_id=
-                "S7",
+                "S8",
 
             user_id=
                 "U3",
@@ -456,11 +426,11 @@ class TestRevocationAwareSession(
             )
         )
 
-        revoked = (
+        snapshot = (
             self.manager
-            .get_revoked_fact_ids(
+            .get_session_snapshot(
                 session_id=
-                    "S7",
+                    "S8",
 
                 user_id=
                     "U3",
@@ -473,11 +443,21 @@ class TestRevocationAwareSession(
         )
 
         self.assertEqual(
-            revoked,
+            snapshot[
+                "temporary_rule_ids"
+            ],
+            []
+        )
+
+        self.assertEqual(
+            snapshot[
+                "revoked_rule_ids"
+            ],
             []
         )
 
 
 if __name__ == "__main__":
 
+    unittest.main()
     unittest.main()
