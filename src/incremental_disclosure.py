@@ -2,33 +2,46 @@ import json
 from itertools import combinations
 from pathlib import Path
 
+from src.dynamic_authorization import (
+    DynamicAuthorizationManager
+)
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
 
 def load_json(filename):
+
     with open(
         DATA_DIR / filename,
         "r",
         encoding="utf-8"
     ) as f:
+
         return json.load(f)
 
 
 class IncrementalDisclosureController:
     """
-    이전 공개정보와 신규 공개정보의 결합으로 발생하는
-    금지된 정보조합을 탐지하고,
+    과거 공개 Fact와 현재 후보 Fact의 조합을 검사하고,
+    금지된 정보조합을 모두 차단하면서
+    제거되는 업무가치의 총합을 최소화한다.
 
-    금지조합을 모두 차단하면서
-    업무정보 손실량을 최소화하는 Fact 집합을 계산한다.
+    추가 기능:
+    동적 임시 권한의 유효시간을 반영한다.
     """
 
     def __init__(self):
 
-        self.users = load_json("users.json")
-        self.rules = load_json("inference_rules.json")
+        self.users = load_json(
+            "users.json"
+        )
+
+        self.rules = load_json(
+            "inference_rules.json"
+        )
+
         self.fact_utility = load_json(
             "fact_utility.json"
         )
@@ -40,89 +53,156 @@ class IncrementalDisclosureController:
 
         self.utility_map = {
             item["fact_id"]:
-                float(item["business_value"])
+                float(
+                    item[
+                        "business_value"
+                    ]
+                )
             for item in self.fact_utility
         }
+
+        self.dynamic_authorization = (
+            DynamicAuthorizationManager()
+        )
 
         self.validate_utility_values()
 
     # =================================================
-    # 초기 데이터 검증
+    # Utility 검증
     # =================================================
 
     def validate_utility_values(self):
-        """
-        inference rule에서 사용하는 모든 Fact에
-        업무가치가 정의되어 있는지 확인한다.
-        """
 
         required_fact_ids = set()
 
         for rule in self.rules:
+
             required_fact_ids.update(
-                rule["required_facts"]
+                rule[
+                    "required_facts"
+                ]
             )
 
         missing = (
             required_fact_ids
-            - set(self.utility_map.keys())
+            - set(
+                self.utility_map.keys()
+            )
         )
 
         if missing:
+
             raise ValueError(
-                "업무가치가 정의되지 않은 Fact가 있습니다: "
+                "업무가치가 정의되지 않은 "
+                "Fact가 있습니다: "
                 f"{sorted(missing)}"
             )
 
     # =================================================
-    # 사용자 정보
+    # 사용자
     # =================================================
 
-    def get_user(self, user_id):
+    def get_user(
+        self,
+        user_id
+    ):
 
         if user_id not in self.user_map:
+
             raise ValueError(
                 f"Unknown user: {user_id}"
             )
 
-        return self.user_map[user_id]
+        return self.user_map[
+            user_id
+        ]
 
     # =================================================
-    # Fact 업무가치
+    # Business Utility
     # =================================================
 
-    def get_business_value(self, fact_id):
+    def get_business_value(
+        self,
+        fact_id
+    ):
 
         return self.utility_map.get(
             fact_id,
             0.0
         )
 
-    def calculate_utility(self, facts):
+    def calculate_utility(
+        self,
+        facts
+    ):
 
         return sum(
-            self.get_business_value(fact)
+            self.get_business_value(
+                fact
+            )
             for fact in facts
         )
 
     # =================================================
-    # 정보조합 권한
+    # Effective Authorization
+    # =================================================
+
+    def get_authorization_context(
+        self,
+        user_id,
+        as_of=None
+    ):
+
+        return (
+            self.dynamic_authorization
+            .get_effective_context(
+                user_id=user_id,
+                as_of=as_of
+            )
+        )
+
+    # =================================================
+    # 정보조합 권한 판단
     # =================================================
 
     def can_receive_combination(
         self,
-        user,
-        rule
+        user_id,
+        rule,
+        as_of=None
     ):
 
-        clearance_ok = (
-            user["clearance"]
-            >= rule["required_clearance"]
+        context = (
+            self.get_authorization_context(
+                user_id,
+                as_of
+            )
         )
 
-        mission_ok = (
-            user["mission"]
-            in rule["allowed_missions"]
+        clearance_ok = (
+            context[
+                "effective_clearance"
+            ]
+            >= rule[
+                "required_clearance"
+            ]
+        )
+
+        allowed_missions = set(
+            rule[
+                "allowed_missions"
+            ]
+        )
+
+        effective_missions = set(
+            context[
+                "effective_missions"
+            ]
+        )
+
+        mission_ok = bool(
+            allowed_missions
+            & effective_missions
         )
 
         return (
@@ -131,21 +211,24 @@ class IncrementalDisclosureController:
         )
 
     # =================================================
-    # 현재 위반 규칙 확인
+    # 현재 위반 규칙
     # =================================================
 
     def find_violations(
         self,
         user_id,
         exposed_facts,
-        candidate_facts
+        candidate_facts,
+        as_of=None
     ):
 
-        user = self.get_user(user_id)
-
         available_facts = (
-            set(exposed_facts)
-            | set(candidate_facts)
+            set(
+                exposed_facts
+            )
+            | set(
+                candidate_facts
+            )
         )
 
         violations = []
@@ -153,21 +236,28 @@ class IncrementalDisclosureController:
         for rule in self.rules:
 
             required = set(
-                rule["required_facts"]
+                rule[
+                    "required_facts"
+                ]
             )
 
             if not required.issubset(
                 available_facts
             ):
+
                 continue
 
             if self.can_receive_combination(
-                user,
-                rule
+                user_id=user_id,
+                rule=rule,
+                as_of=as_of
             ):
+
                 continue
 
-            violations.append(rule)
+            violations.append(
+                rule
+            )
 
         return violations
 
@@ -178,38 +268,46 @@ class IncrementalDisclosureController:
     def find_preexisting_violations(
         self,
         user_id,
-        exposed_facts
+        exposed_facts,
+        as_of=None
     ):
 
-        user = self.get_user(user_id)
-
-        exposed = set(exposed_facts)
+        exposed = set(
+            exposed_facts
+        )
 
         violations = []
 
         for rule in self.rules:
 
             required = set(
-                rule["required_facts"]
+                rule[
+                    "required_facts"
+                ]
             )
 
             if not required.issubset(
                 exposed
             ):
+
                 continue
 
             if self.can_receive_combination(
-                user,
-                rule
+                user_id=user_id,
+                rule=rule,
+                as_of=as_of
             ):
+
                 continue
 
-            violations.append(rule)
+            violations.append(
+                rule
+            )
 
         return violations
 
     # =================================================
-    # 특정 Fact 제거 후 안전성 검사
+    # 제거 후 안전성
     # =================================================
 
     def is_safe_after_removal(
@@ -217,7 +315,8 @@ class IncrementalDisclosureController:
         user_id,
         exposed_facts,
         candidate_facts,
-        removed_facts
+        removed_facts,
+        as_of=None
     ):
 
         removed_set = set(
@@ -230,64 +329,104 @@ class IncrementalDisclosureController:
             if fact not in removed_set
         ]
 
-        violations = self.find_violations(
-            user_id=user_id,
-            exposed_facts=exposed_facts,
-            candidate_facts=remaining_candidates
+        violations = (
+            self.find_violations(
+                user_id=
+                    user_id,
+
+                exposed_facts=
+                    exposed_facts,
+
+                candidate_facts=
+                    remaining_candidates,
+
+                as_of=
+                    as_of
+            )
         )
 
         preexisting = {
             rule["rule_id"]
             for rule
             in self.find_preexisting_violations(
-                user_id,
-                exposed_facts
+                user_id=
+                    user_id,
+
+                exposed_facts=
+                    exposed_facts,
+
+                as_of=
+                    as_of
             )
         }
 
         new_violations = [
             rule
             for rule in violations
-            if rule["rule_id"]
-            not in preexisting
+            if (
+                rule["rule_id"]
+                not in preexisting
+            )
         ]
 
-        return len(new_violations) == 0
+        return (
+            len(
+                new_violations
+            )
+            == 0
+        )
 
     # =================================================
-    # 핵심:
-    # 가중 최소 업무손실 제거 알고리즘
+    # 가중 최소 업무손실 제거
     # =================================================
 
     def find_minimum_loss_removal(
         self,
         user_id,
         exposed_facts,
-        candidate_facts
+        candidate_facts,
+        as_of=None
     ):
 
         candidate_facts = list(
-            dict.fromkeys(candidate_facts)
+            dict.fromkeys(
+                candidate_facts
+            )
         )
 
         # 아무것도 제거하지 않아도 안전
         if self.is_safe_after_removal(
-            user_id,
-            exposed_facts,
-            candidate_facts,
-            []
+            user_id=
+                user_id,
+
+            exposed_facts=
+                exposed_facts,
+
+            candidate_facts=
+                candidate_facts,
+
+            removed_facts=
+                [],
+
+            as_of=
+                as_of
         ):
+
             return []
 
         best_removal = None
-        best_cost = float("inf")
-        best_count = float("inf")
+        best_cost = float(
+            "inf"
+        )
+
+        best_count = float(
+            "inf"
+        )
 
         number_of_candidates = len(
             candidate_facts
         )
 
-        # 모든 가능한 제거조합 탐색
         for size in range(
             1,
             number_of_candidates + 1
@@ -298,101 +437,172 @@ class IncrementalDisclosureController:
                 size
             ):
 
-                removed = list(subset)
-
-                # 보안조건을 만족하지 않으면 제외
-                if not self.is_safe_after_removal(
-                    user_id,
-                    exposed_facts,
-                    candidate_facts,
-                    removed
-                ):
-                    continue
-
-                loss = self.calculate_utility(
-                    removed
+                removed = list(
+                    subset
                 )
 
-                # -------------------------------------
-                # 1순위: 업무손실 최소
-                # 2순위: 제거 Fact 수 최소
-                # 3순위: 결과 재현성을 위한 사전식 순서
-                # -------------------------------------
+                if not (
+                    self.is_safe_after_removal(
+                        user_id=
+                            user_id,
+
+                        exposed_facts=
+                            exposed_facts,
+
+                        candidate_facts=
+                            candidate_facts,
+
+                        removed_facts=
+                            removed,
+
+                        as_of=
+                            as_of
+                    )
+                ):
+
+                    continue
+
+                loss = (
+                    self.calculate_utility(
+                        removed
+                    )
+                )
 
                 should_replace = False
 
+                # 1순위:
+                # 총 업무가치 손실 최소
                 if loss < best_cost:
+
                     should_replace = True
 
+                # 2순위:
+                # 동일 손실이면 제거 Fact 수 최소
                 elif (
                     loss == best_cost
-                    and len(removed) < best_count
+                    and len(
+                        removed
+                    ) < best_count
                 ):
+
                     should_replace = True
 
+                # 3순위:
+                # 완전 동일 조건이면 결정론적 선택
                 elif (
                     loss == best_cost
-                    and len(removed) == best_count
-                    and best_removal is not None
-                    and tuple(sorted(removed))
-                    < tuple(sorted(best_removal))
+                    and len(
+                        removed
+                    ) == best_count
+                    and best_removal
+                    is not None
+                    and tuple(
+                        sorted(
+                            removed
+                        )
+                    )
+                    < tuple(
+                        sorted(
+                            best_removal
+                        )
+                    )
                 ):
+
                     should_replace = True
 
                 if should_replace:
 
-                    best_removal = removed
+                    best_removal = (
+                        removed
+                    )
 
-                    best_cost = loss
+                    best_cost = (
+                        loss
+                    )
 
                     best_count = len(
                         removed
                     )
 
+        # candidate 전체를 지워도 신규 위반을
+        # 해결할 수 없다면 현재 Turn에서
+        # 해결 가능한 위반이 없는 것으로 본다.
         if best_removal is None:
 
-            # 현재 candidate를 전부 제거해도
-            # 신규 위반을 해결할 수 없는 경우
-            # 일반적으로 과거에 이미 위반이 완성된 경우
             return []
 
         return best_removal
 
     # =================================================
-    # 한 Turn 평가
+    # Turn 전체 평가
     # =================================================
 
     def evaluate_turn(
         self,
         user_id,
         exposed_facts,
-        candidate_facts
+        candidate_facts,
+        as_of=None
     ):
 
         candidate_facts = list(
-            dict.fromkeys(candidate_facts)
+            dict.fromkeys(
+                candidate_facts
+            )
+        )
+
+        authorization_context = (
+            self.get_authorization_context(
+                user_id=
+                    user_id,
+
+                as_of=
+                    as_of
+            )
         )
 
         initial_violations = (
             self.find_violations(
-                user_id,
-                exposed_facts,
-                candidate_facts
+                user_id=
+                    user_id,
+
+                exposed_facts=
+                    exposed_facts,
+
+                candidate_facts=
+                    candidate_facts,
+
+                as_of=
+                    as_of
             )
         )
 
         preexisting_violations = (
             self.find_preexisting_violations(
-                user_id,
-                exposed_facts
+                user_id=
+                    user_id,
+
+                exposed_facts=
+                    exposed_facts,
+
+                as_of=
+                    as_of
             )
         )
 
         removed_facts = (
             self.find_minimum_loss_removal(
-                user_id,
-                exposed_facts,
-                candidate_facts
+                user_id=
+                    user_id,
+
+                exposed_facts=
+                    exposed_facts,
+
+                candidate_facts=
+                    candidate_facts,
+
+                as_of=
+                    as_of
             )
         )
 
@@ -433,27 +643,49 @@ class IncrementalDisclosureController:
 
         else:
 
-            utility_retention_rate = 1.0
+            utility_retention_rate = (
+                1.0
+            )
 
         return {
-            "user_id": user_id,
+            "user_id":
+                user_id,
+
+            "as_of":
+                (
+                    str(as_of)
+                    if as_of is not None
+                    else None
+                ),
+
+            "authorization_context":
+                authorization_context,
 
             "previously_exposed":
-                list(exposed_facts),
+                list(
+                    exposed_facts
+                ),
 
             "candidate_facts":
                 candidate_facts,
 
-            "detected_rules": [
-                rule["rule_id"]
-                for rule in initial_violations
-            ],
+            "detected_rules":
+                [
+                    rule[
+                        "rule_id"
+                    ]
+                    for rule
+                    in initial_violations
+                ],
 
-            "preexisting_violations": [
-                rule["rule_id"]
-                for rule
-                in preexisting_violations
-            ],
+            "preexisting_violations":
+                [
+                    rule[
+                        "rule_id"
+                    ]
+                    for rule
+                    in preexisting_violations
+                ],
 
             "removed_facts":
                 removed_facts,
@@ -485,59 +717,77 @@ if __name__ == "__main__":
         IncrementalDisclosureController()
     )
 
-    print(
-        "\n=== Weighted Minimum Loss Test ==="
-    )
+    candidate_facts = [
+        "OPS001-F2",
+        "OPS002-F2"
+    ]
 
-    result = controller.evaluate_turn(
-        user_id="U3",
-        exposed_facts=[],
-        candidate_facts=[
-            "OPS001-F2",
-            "OPS002-F2",
-            "OPS002-F3"
-        ]
-    )
+    times = [
+        (
+            "BEFORE",
+            "2026-09-29T08:30:00+09:00"
+        ),
+        (
+            "ACTIVE",
+            "2026-09-29T10:00:00+09:00"
+        ),
+        (
+            "EXPIRED",
+            "2026-09-29T12:30:00+09:00"
+        )
+    ]
 
-    for key, value in result.items():
+    for label, as_of in times:
+
         print(
-            f"{key}: {value}"
+            "\n"
+            + "=" * 60
         )
 
-    print(
-        "\n=== Multi-turn Test ==="
-    )
-
-    result = controller.evaluate_turn(
-        user_id="U3",
-        exposed_facts=[
-            "OPS001-F2"
-        ],
-        candidate_facts=[
-            "OPS002-F2",
-            "OPS002-F3"
-        ]
-    )
-
-    for key, value in result.items():
         print(
-            f"{key}: {value}"
+            label
         )
 
-    print(
-        "\n=== Authorized User Test ==="
-    )
+        result = (
+            controller.evaluate_turn(
+                user_id=
+                    "U3",
 
-    result = controller.evaluate_turn(
-        user_id="U4",
-        exposed_facts=[],
-        candidate_facts=[
-            "LOG001-F3",
-            "LOG002-F3"
-        ]
-    )
+                exposed_facts=
+                    [],
 
-    for key, value in result.items():
+                candidate_facts=
+                    candidate_facts,
+
+                as_of=
+                    as_of
+            )
+        )
+
         print(
-            f"{key}: {value}"
+            "Authorization:",
+            result[
+                "authorization_context"
+            ]
+        )
+
+        print(
+            "Detected Rules:",
+            result[
+                "detected_rules"
+            ]
+        )
+
+        print(
+            "Removed Facts:",
+            result[
+                "removed_facts"
+            ]
+        )
+
+        print(
+            "Allowed Facts:",
+            result[
+                "allowed_facts"
+            ]
         )
