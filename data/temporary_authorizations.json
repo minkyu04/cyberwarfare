@@ -1,0 +1,26 @@
+[
+  {
+    "authorization_id": "TA-001",
+    "user_id": "U3",
+    "description": "BLUE 임무 수행을 위한 합성 임시 권한",
+    "valid_from": "2026-09-29T09:00:00+09:00",
+    "valid_until": "2026-09-29T12:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "BLUE"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-002",
+    "user_id": "U4",
+    "description": "CYBER_COMMAND 분석업무를 위한 합성 임시 권한",
+    "valid_from": "2026-09-29T14:00:00+09:00",
+    "valid_until": "2026-09-29T16:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "CYBER_COMMAND"
+    ],
+    "enabled": true
+  }
+]
