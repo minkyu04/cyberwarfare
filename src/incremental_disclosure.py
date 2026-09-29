@@ -18,24 +18,65 @@ def load_json(filename):
 
 class IncrementalDisclosureController:
     """
-    이전에 공개된 Fact와 이번 응답에서 공개하려는 Fact를 결합하여
-    금지된 정보조합이 형성되는지 검사하고,
-    해당 조합을 차단하기 위한 최소 제거 집합을 계산한다.
+    이전 공개정보와 신규 공개정보의 결합으로 발생하는
+    금지된 정보조합을 탐지하고,
+
+    금지조합을 모두 차단하면서
+    업무정보 손실량을 최소화하는 Fact 집합을 계산한다.
     """
 
     def __init__(self):
 
         self.users = load_json("users.json")
         self.rules = load_json("inference_rules.json")
+        self.fact_utility = load_json(
+            "fact_utility.json"
+        )
 
         self.user_map = {
             user["user_id"]: user
             for user in self.users
         }
 
-    # -------------------------------------------------
+        self.utility_map = {
+            item["fact_id"]:
+                float(item["business_value"])
+            for item in self.fact_utility
+        }
+
+        self.validate_utility_values()
+
+    # =================================================
+    # 초기 데이터 검증
+    # =================================================
+
+    def validate_utility_values(self):
+        """
+        inference rule에서 사용하는 모든 Fact에
+        업무가치가 정의되어 있는지 확인한다.
+        """
+
+        required_fact_ids = set()
+
+        for rule in self.rules:
+            required_fact_ids.update(
+                rule["required_facts"]
+            )
+
+        missing = (
+            required_fact_ids
+            - set(self.utility_map.keys())
+        )
+
+        if missing:
+            raise ValueError(
+                "업무가치가 정의되지 않은 Fact가 있습니다: "
+                f"{sorted(missing)}"
+            )
+
+    # =================================================
     # 사용자 정보
-    # -------------------------------------------------
+    # =================================================
 
     def get_user(self, user_id):
 
@@ -46,9 +87,27 @@ class IncrementalDisclosureController:
 
         return self.user_map[user_id]
 
-    # -------------------------------------------------
-    # 사용자가 해당 정보조합을 받을 권한이 있는지
-    # -------------------------------------------------
+    # =================================================
+    # Fact 업무가치
+    # =================================================
+
+    def get_business_value(self, fact_id):
+
+        return self.utility_map.get(
+            fact_id,
+            0.0
+        )
+
+    def calculate_utility(self, facts):
+
+        return sum(
+            self.get_business_value(fact)
+            for fact in facts
+        )
+
+    # =================================================
+    # 정보조합 권한
+    # =================================================
 
     def can_receive_combination(
         self,
@@ -71,9 +130,9 @@ class IncrementalDisclosureController:
             and mission_ok
         )
 
-    # -------------------------------------------------
-    # 현재 상태에서 위반되는 규칙 탐지
-    # -------------------------------------------------
+    # =================================================
+    # 현재 위반 규칙 확인
+    # =================================================
 
     def find_violations(
         self,
@@ -97,13 +156,11 @@ class IncrementalDisclosureController:
                 rule["required_facts"]
             )
 
-            # 해당 조합 자체가 완성되지 않았으면 문제 없음
             if not required.issubset(
                 available_facts
             ):
                 continue
 
-            # 사용자가 해당 조합을 받을 권한이 있으면 문제 없음
             if self.can_receive_combination(
                 user,
                 rule
@@ -114,9 +171,9 @@ class IncrementalDisclosureController:
 
         return violations
 
-    # -------------------------------------------------
-    # 이미 이전 턴에서 발생한 위반인지 검사
-    # -------------------------------------------------
+    # =================================================
+    # 과거에 이미 발생한 위반
+    # =================================================
 
     def find_preexisting_violations(
         self,
@@ -125,7 +182,8 @@ class IncrementalDisclosureController:
     ):
 
         user = self.get_user(user_id)
-        history = set(exposed_facts)
+
+        exposed = set(exposed_facts)
 
         violations = []
 
@@ -135,7 +193,9 @@ class IncrementalDisclosureController:
                 rule["required_facts"]
             )
 
-            if not required.issubset(history):
+            if not required.issubset(
+                exposed
+            ):
                 continue
 
             if self.can_receive_combination(
@@ -148,9 +208,9 @@ class IncrementalDisclosureController:
 
         return violations
 
-    # -------------------------------------------------
-    # 제거 후에도 금지 조합이 남아있는지 검사
-    # -------------------------------------------------
+    # =================================================
+    # 특정 Fact 제거 후 안전성 검사
+    # =================================================
 
     def is_safe_after_removal(
         self,
@@ -160,10 +220,14 @@ class IncrementalDisclosureController:
         removed_facts
     ):
 
+        removed_set = set(
+            removed_facts
+        )
+
         remaining_candidates = [
             fact
             for fact in candidate_facts
-            if fact not in removed_facts
+            if fact not in removed_set
         ]
 
         violations = self.find_violations(
@@ -172,11 +236,10 @@ class IncrementalDisclosureController:
             candidate_facts=remaining_candidates
         )
 
-        # 이전 대화만으로 이미 발생한 위반은
-        # 현재 답변에서 해결할 수 없으므로 제외하고 판단
-        history_only_violations = {
+        preexisting = {
             rule["rule_id"]
-            for rule in self.find_preexisting_violations(
+            for rule
+            in self.find_preexisting_violations(
                 user_id,
                 exposed_facts
             )
@@ -186,16 +249,17 @@ class IncrementalDisclosureController:
             rule
             for rule in violations
             if rule["rule_id"]
-            not in history_only_violations
+            not in preexisting
         ]
 
         return len(new_violations) == 0
 
-    # -------------------------------------------------
-    # 최소 제거 Fact 계산
-    # -------------------------------------------------
+    # =================================================
+    # 핵심:
+    # 가중 최소 업무손실 제거 알고리즘
+    # =================================================
 
-    def find_minimum_removal(
+    def find_minimum_loss_removal(
         self,
         user_id,
         exposed_facts,
@@ -206,7 +270,7 @@ class IncrementalDisclosureController:
             dict.fromkeys(candidate_facts)
         )
 
-        # 아무것도 제거하지 않아도 안전한지 먼저 확인
+        # 아무것도 제거하지 않아도 안전
         if self.is_safe_after_removal(
             user_id,
             exposed_facts,
@@ -215,11 +279,18 @@ class IncrementalDisclosureController:
         ):
             return []
 
-        # 제거 개수 1개 → 2개 → ... 순서로 탐색
-        # 첫 번째로 안전해지는 조합이 최소 제거 집합
+        best_removal = None
+        best_cost = float("inf")
+        best_count = float("inf")
+
+        number_of_candidates = len(
+            candidate_facts
+        )
+
+        # 모든 가능한 제거조합 탐색
         for size in range(
             1,
-            len(candidate_facts) + 1
+            number_of_candidates + 1
         ):
 
             for subset in combinations(
@@ -229,21 +300,67 @@ class IncrementalDisclosureController:
 
                 removed = list(subset)
 
-                if self.is_safe_after_removal(
+                # 보안조건을 만족하지 않으면 제외
+                if not self.is_safe_after_removal(
                     user_id,
                     exposed_facts,
                     candidate_facts,
                     removed
                 ):
-                    return removed
+                    continue
 
-        # 모든 후보를 제거해도 해결할 수 없다면
-        # 이전 턴에서 이미 위반된 경우일 가능성이 높음
-        return candidate_facts
+                loss = self.calculate_utility(
+                    removed
+                )
 
-    # -------------------------------------------------
-    # 한 턴 전체 평가
-    # -------------------------------------------------
+                # -------------------------------------
+                # 1순위: 업무손실 최소
+                # 2순위: 제거 Fact 수 최소
+                # 3순위: 결과 재현성을 위한 사전식 순서
+                # -------------------------------------
+
+                should_replace = False
+
+                if loss < best_cost:
+                    should_replace = True
+
+                elif (
+                    loss == best_cost
+                    and len(removed) < best_count
+                ):
+                    should_replace = True
+
+                elif (
+                    loss == best_cost
+                    and len(removed) == best_count
+                    and best_removal is not None
+                    and tuple(sorted(removed))
+                    < tuple(sorted(best_removal))
+                ):
+                    should_replace = True
+
+                if should_replace:
+
+                    best_removal = removed
+
+                    best_cost = loss
+
+                    best_count = len(
+                        removed
+                    )
+
+        if best_removal is None:
+
+            # 현재 candidate를 전부 제거해도
+            # 신규 위반을 해결할 수 없는 경우
+            # 일반적으로 과거에 이미 위반이 완성된 경우
+            return []
+
+        return best_removal
+
+    # =================================================
+    # 한 Turn 평가
+    # =================================================
 
     def evaluate_turn(
         self,
@@ -251,6 +368,10 @@ class IncrementalDisclosureController:
         exposed_facts,
         candidate_facts
     ):
+
+        candidate_facts = list(
+            dict.fromkeys(candidate_facts)
+        )
 
         initial_violations = (
             self.find_violations(
@@ -267,17 +388,52 @@ class IncrementalDisclosureController:
             )
         )
 
-        removal = self.find_minimum_removal(
-            user_id,
-            exposed_facts,
-            candidate_facts
+        removed_facts = (
+            self.find_minimum_loss_removal(
+                user_id,
+                exposed_facts,
+                candidate_facts
+            )
+        )
+
+        removed_set = set(
+            removed_facts
         )
 
         allowed_facts = [
             fact
             for fact in candidate_facts
-            if fact not in removal
+            if fact not in removed_set
         ]
+
+        candidate_utility = (
+            self.calculate_utility(
+                candidate_facts
+            )
+        )
+
+        removed_utility = (
+            self.calculate_utility(
+                removed_facts
+            )
+        )
+
+        retained_utility = (
+            self.calculate_utility(
+                allowed_facts
+            )
+        )
+
+        if candidate_utility > 0:
+
+            utility_retention_rate = (
+                retained_utility
+                / candidate_utility
+            )
+
+        else:
+
+            utility_retention_rate = 1.0
 
         return {
             "user_id": user_id,
@@ -286,7 +442,7 @@ class IncrementalDisclosureController:
                 list(exposed_facts),
 
             "candidate_facts":
-                list(candidate_facts),
+                candidate_facts,
 
             "detected_rules": [
                 rule["rule_id"]
@@ -299,15 +455,28 @@ class IncrementalDisclosureController:
                 in preexisting_violations
             ],
 
-            "removed_facts": removal,
+            "removed_facts":
+                removed_facts,
 
             "allowed_facts":
-                allowed_facts
+                allowed_facts,
+
+            "candidate_utility":
+                candidate_utility,
+
+            "removed_utility":
+                removed_utility,
+
+            "retained_utility":
+                retained_utility,
+
+            "utility_retention_rate":
+                utility_retention_rate
         }
 
 
 # =====================================================
-# 간단한 실행 테스트
+# 실행 예제
 # =====================================================
 
 if __name__ == "__main__":
@@ -317,24 +486,7 @@ if __name__ == "__main__":
     )
 
     print(
-        "\n=== Test 1: Multi-turn Leakage ==="
-    )
-
-    result = controller.evaluate_turn(
-        user_id="U3",
-        exposed_facts=[
-            "OPS001-F2"
-        ],
-        candidate_facts=[
-            "OPS002-F2"
-        ]
-    )
-
-    print(result)
-
-
-    print(
-        "\n=== Test 2: Minimum Removal ==="
+        "\n=== Weighted Minimum Loss Test ==="
     )
 
     result = controller.evaluate_turn(
@@ -347,11 +499,33 @@ if __name__ == "__main__":
         ]
     )
 
-    print(result)
-
+    for key, value in result.items():
+        print(
+            f"{key}: {value}"
+        )
 
     print(
-        "\n=== Test 3: Authorized Combination ==="
+        "\n=== Multi-turn Test ==="
+    )
+
+    result = controller.evaluate_turn(
+        user_id="U3",
+        exposed_facts=[
+            "OPS001-F2"
+        ],
+        candidate_facts=[
+            "OPS002-F2",
+            "OPS002-F3"
+        ]
+    )
+
+    for key, value in result.items():
+        print(
+            f"{key}: {value}"
+        )
+
+    print(
+        "\n=== Authorized User Test ==="
     )
 
     result = controller.evaluate_turn(
@@ -363,20 +537,7 @@ if __name__ == "__main__":
         ]
     )
 
-    print(result)
-
-
-    print(
-        "\n=== Test 4: Unauthorized Combination ==="
-    )
-
-    result = controller.evaluate_turn(
-        user_id="U4",
-        exposed_facts=[],
-        candidate_facts=[
-            "VUL001-F3",
-            "VUL002-F3"
-        ]
-    )
-
-    print(result)
+    for key, value in result.items():
+        print(
+            f"{key}: {value}"
+        )
