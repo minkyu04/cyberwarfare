@@ -3,23 +3,19 @@ from copy import deepcopy
 
 class RevocationAwareSessionManager:
     """
-    대화 세션의 정보 공개 이력을 관리한다.
+    대화 Session의 공개이력과 임시권한 의존성을 관리한다.
 
     핵심 원칙
     --------------------------------------------------
-    1. 이미 사용자에게 공개된 Fact는 Exposure History에서
-       삭제하지 않는다.
+    이미 공개된 Fact 자체를 삭제하거나 회수했다고
+    가정하지 않는다.
 
-    2. 임시 권한에 의존하여 공개된 Fact는 해당 권한이
-       만료된 후 AI가 다시 재사용하지 못하도록 표시한다.
+    대신 어떤 정보조합 Rule이 임시권한에 의해
+    허용되었는지를 기록한다.
 
-    3. 과거 공개 Fact는 이후 정보결합 위험 계산에는
-       계속 사용한다.
-
-    즉,
-        Human knowledge != AI reusable session context
-
-    를 구분한다.
+    권한 만료 후에는 해당 Rule을 현재 정책으로 다시
+    평가하고, 실제 Fact 제거는 IncrementalDisclosureController가
+    수행한다.
     """
 
     def __init__(
@@ -41,7 +37,7 @@ class RevocationAwareSessionManager:
         }
 
     # =================================================
-    # Session 생성 / 조회
+    # Session
     # =================================================
 
     def get_session(
@@ -124,7 +120,7 @@ class RevocationAwareSessionManager:
         )
 
     # =================================================
-    # 특정 Turn에서 임시권한 덕분에 해제된 Rule 탐지
+    # 임시권한 때문에 허용된 Rule 탐지
     # =================================================
 
     def find_temporarily_lifted_rules(
@@ -136,11 +132,12 @@ class RevocationAwareSessionManager:
     ):
 
         # ---------------------------------------------
-        # 임시 권한을 전혀 적용하지 않았을 때
+        # 임시권한 없음
         # ---------------------------------------------
 
         baseline_violations = (
-            self.controller.find_violations(
+            self.controller
+            .find_current_response_violations(
                 user_id=
                     user_id,
 
@@ -156,11 +153,12 @@ class RevocationAwareSessionManager:
         )
 
         # ---------------------------------------------
-        # 현재 시각의 동적 권한 적용
+        # 현재 동적권한 적용
         # ---------------------------------------------
 
         current_violations = (
-            self.controller.find_violations(
+            self.controller
+            .find_current_response_violations(
                 user_id=
                     user_id,
 
@@ -187,17 +185,13 @@ class RevocationAwareSessionManager:
             in current_violations
         }
 
-        # baseline에서는 위반인데
-        # 현재 임시권한 때문에 위반이 아니게 된 Rule
-        lifted_rule_ids = sorted(
+        return sorted(
             baseline_ids
             - current_ids
         )
 
-        return lifted_rule_ids
-
     # =================================================
-    # Fact 공개 기록
+    # 공개 Event 기록
     # =================================================
 
     def record_disclosure(
@@ -246,11 +240,15 @@ class RevocationAwareSessionManager:
             )
         )
 
-        for fact_id in disclosed_fact_ids:
+        for fact_id in (
+            disclosed_fact_ids
+        ):
 
-            temporary_rule_ids = []
+            related_temporary_rules = []
 
-            for rule_id in lifted_rule_ids:
+            for rule_id in (
+                lifted_rule_ids
+            ):
 
                 rule = self.rule_map[
                     rule_id
@@ -263,7 +261,7 @@ class RevocationAwareSessionManager:
                     ]
                 ):
 
-                    temporary_rule_ids.append(
+                    related_temporary_rules.append(
                         rule_id
                     )
 
@@ -274,8 +272,7 @@ class RevocationAwareSessionManager:
                 "disclosed_at":
                     (
                         str(as_of)
-                        if as_of
-                        is not None
+                        if as_of is not None
                         else None
                     ),
 
@@ -287,7 +284,7 @@ class RevocationAwareSessionManager:
                     ),
 
                 "temporary_rule_ids":
-                    temporary_rule_ids
+                    related_temporary_rules
             }
 
             session[
@@ -297,35 +294,58 @@ class RevocationAwareSessionManager:
             )
 
     # =================================================
-    # 과거 공개 Event가 현재도 재사용 가능한지 판단
+    # Session에서 사용된 임시 Rule
     # =================================================
 
-    def is_event_reusable(
+    def get_temporary_rule_ids(
         self,
+        session_id,
+        user_id
+    ):
+
+        session = self.get_session(
+            session_id,
+            user_id
+        )
+
+        rule_ids = set()
+
+        for event in (
+            session[
+                "exposure_events"
+            ]
+        ):
+
+            rule_ids.update(
+                event.get(
+                    "temporary_rule_ids",
+                    []
+                )
+            )
+
+        return sorted(
+            rule_ids
+        )
+
+    # =================================================
+    # 현재 만료/회수된 Rule
+    # =================================================
+
+    def get_revoked_rule_ids(
+        self,
+        session_id,
         user_id,
-        event,
         as_of=None
     ):
 
         temporary_rule_ids = (
-            event[
-                "temporary_rule_ids"
-            ]
+            self.get_temporary_rule_ids(
+                session_id,
+                user_id
+            )
         )
 
-        # ---------------------------------------------
-        # 임시 권한에 의존하지 않고 공개된 Fact
-        # ---------------------------------------------
-
-        if not temporary_rule_ids:
-
-            return True
-
-        # ---------------------------------------------
-        # 임시권한 의존 Fact
-        #
-        # 관련 Rule이 현재도 모두 허용되는지 확인한다.
-        # ---------------------------------------------
+        revoked = []
 
         for rule_id in (
             temporary_rule_ids
@@ -351,84 +371,8 @@ class RevocationAwareSessionManager:
 
             if not allowed_now:
 
-                return False
-
-        return True
-
-    # =================================================
-    # 현재 회수된 Fact 계산
-    # =================================================
-
-    def get_revoked_fact_ids(
-        self,
-        session_id,
-        user_id,
-        as_of=None
-    ):
-
-        session = self.get_session(
-            session_id,
-            user_id
-        )
-
-        # ---------------------------------------------
-        # 같은 Fact가 여러 번 공개됐을 수도 있다.
-        #
-        # 한 번이라도 비임시권한 상태에서 정당하게
-        # 공개된 기록이 있다면 해당 Fact 자체를
-        # Session reuse 차원에서 회수하지 않는다.
-        # ---------------------------------------------
-
-        events_by_fact = {}
-
-        for event in (
-            session[
-                "exposure_events"
-            ]
-        ):
-
-            fact_id = event[
-                "fact_id"
-            ]
-
-            events_by_fact.setdefault(
-                fact_id,
-                []
-            )
-
-            events_by_fact[
-                fact_id
-            ].append(
-                event
-            )
-
-        revoked = []
-
-        for (
-            fact_id,
-            events
-        ) in events_by_fact.items():
-
-            reusable_event_exists = any(
-                self.is_event_reusable(
-                    user_id=
-                        user_id,
-
-                    event=
-                        event,
-
-                    as_of=
-                        as_of
-                )
-
-                for event
-                in events
-            )
-
-            if not reusable_event_exists:
-
                 revoked.append(
-                    fact_id
+                    rule_id
                 )
 
         return sorted(
@@ -436,54 +380,7 @@ class RevocationAwareSessionManager:
         )
 
     # =================================================
-    # 현재 Candidate 중 회수된 Fact 차단
-    # =================================================
-
-    def filter_revoked_candidates(
-        self,
-        session_id,
-        user_id,
-        candidate_fact_ids,
-        as_of=None
-    ):
-
-        revoked = set(
-            self.get_revoked_fact_ids(
-                session_id=
-                    session_id,
-
-                user_id=
-                    user_id,
-
-                as_of=
-                    as_of
-            )
-        )
-
-        blocked = [
-            fact_id
-            for fact_id
-            in candidate_fact_ids
-            if fact_id in revoked
-        ]
-
-        reusable = [
-            fact_id
-            for fact_id
-            in candidate_fact_ids
-            if fact_id not in revoked
-        ]
-
-        return {
-            "reusable_candidate_facts":
-                reusable,
-
-            "revoked_reuse_facts":
-                blocked
-        }
-
-    # =================================================
-    # Session Snapshot
+    # Snapshot
     # =================================================
 
     def get_session_snapshot(
@@ -511,8 +408,14 @@ class RevocationAwareSessionManager:
                     user_id
                 ),
 
-            "revoked_fact_ids":
-                self.get_revoked_fact_ids(
+            "temporary_rule_ids":
+                self.get_temporary_rule_ids(
+                    session_id,
+                    user_id
+                ),
+
+            "revoked_rule_ids":
+                self.get_revoked_rule_ids(
                     session_id,
                     user_id,
                     as_of
