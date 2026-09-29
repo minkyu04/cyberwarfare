@@ -33,10 +33,6 @@ class WeightedControlledRAG:
 
     def __init__(self):
 
-        # =================================================
-        # 1. Permission-Aware Retrieval
-        # =================================================
-
         print(
             "Loading permission-aware retriever..."
         )
@@ -56,10 +52,6 @@ class WeightedControlledRAG:
             in self.documents
         }
 
-        # =================================================
-        # 2. Disclosure Controller
-        # =================================================
-
         print(
             "Loading disclosure controller..."
         )
@@ -68,13 +60,8 @@ class WeightedControlledRAG:
             IncrementalDisclosureController()
         )
 
-        # =================================================
-        # 3. Revocation-Aware Session Manager
-        # =================================================
-
         print(
-            "Loading revocation-aware "
-            "session manager..."
+            "Loading revocation-aware session manager..."
         )
 
         self.session_manager = (
@@ -82,10 +69,6 @@ class WeightedControlledRAG:
                 self.controller
             )
         )
-
-        # =================================================
-        # 4. Grounded Output Guard
-        # =================================================
 
         print(
             "Loading grounded output guard..."
@@ -95,17 +78,9 @@ class WeightedControlledRAG:
             GroundedOutputGuard()
         )
 
-        # =================================================
-        # 5. Fact Catalog
-        # =================================================
-
         self.fact_catalog = (
             self.build_fact_catalog()
         )
-
-        # =================================================
-        # 6. LLM
-        # =================================================
 
         print(
             "Loading Qwen..."
@@ -133,9 +108,9 @@ class WeightedControlledRAG:
             "Weighted Controlled RAG ready."
         )
 
-    # =====================================================
+    # =================================================
     # Fact Catalog
-    # =====================================================
+    # =================================================
 
     def build_fact_catalog(self):
 
@@ -175,9 +150,9 @@ class WeightedControlledRAG:
 
         return catalog
 
-    # =====================================================
-    # Session 초기화
-    # =====================================================
+    # =================================================
+    # Session
+    # =================================================
 
     def reset_session(
         self,
@@ -188,9 +163,9 @@ class WeightedControlledRAG:
             session_id
         )
 
-    # =====================================================
-    # Fact 후보 추출
-    # =====================================================
+    # =================================================
+    # Candidate Fact
+    # =================================================
 
     def collect_fact_candidates(
         self,
@@ -205,10 +180,6 @@ class WeightedControlledRAG:
             for result
             in retrieval_results
         }
-
-        # -------------------------------------------------
-        # Ground Truth Mode
-        # -------------------------------------------------
 
         if (
             forced_candidate_facts
@@ -227,8 +198,7 @@ class WeightedControlledRAG:
                 ):
 
                     raise ValueError(
-                        f"Unknown fact: "
-                        f"{fact_id}"
+                        f"Unknown fact: {fact_id}"
                     )
 
                 record = (
@@ -258,10 +228,6 @@ class WeightedControlledRAG:
                 )
 
             return records
-
-        # -------------------------------------------------
-        # End-to-End Mode
-        # -------------------------------------------------
 
         candidates = []
 
@@ -325,8 +291,8 @@ class WeightedControlledRAG:
                 f"사실: "
                 f"{item['fact']}"
             )
-            for item
-            in candidates
+
+            for item in candidates
         ]
 
         fact_embeddings = (
@@ -376,9 +342,9 @@ class WeightedControlledRAG:
             )
         ]
 
-    # =====================================================
-    # 허용 Fact Context
-    # =====================================================
+    # =================================================
+    # Fact Context
+    # =================================================
 
     def build_fact_context(
         self,
@@ -416,9 +382,7 @@ class WeightedControlledRAG:
                     document_id
                 ] = {
                     "title":
-                        record[
-                            "title"
-                        ],
+                        record["title"],
 
                     "facts":
                         []
@@ -455,9 +419,9 @@ class WeightedControlledRAG:
             sections
         )
 
-    # =====================================================
+    # =================================================
     # 공개문서 Context
-    # =====================================================
+    # =================================================
 
     def build_public_context(
         self,
@@ -506,18 +470,18 @@ class WeightedControlledRAG:
             sections
         )
 
-    # =====================================================
+    # =================================================
     # Safe Context
-    # =====================================================
+    # =================================================
 
     def build_safe_context(
         self,
         retrieval_results,
-        original_candidate_fact_ids,
+        candidate_fact_ids,
         allowed_fact_ids
     ):
 
-        if original_candidate_fact_ids:
+        if candidate_fact_ids:
 
             return (
                 self.build_fact_context(
@@ -531,9 +495,9 @@ class WeightedControlledRAG:
             )
         )
 
-    # =====================================================
-    # Qwen Draft
-    # =====================================================
+    # =================================================
+    # LLM Draft
+    # =================================================
 
     def generate_draft(
         self,
@@ -551,14 +515,12 @@ class WeightedControlledRAG:
 반드시 [허용된 참고정보]에 명시된 사실만 사용하여
 질문에 답변하라.
 
-참고정보에 없는 수치, 코드, 날짜, 시간, 비율,
-인물, 장비, 상태 또는 결론을 생성하지 마라.
+현재 허용된 참고정보에 없는 수치, 코드, 날짜,
+시간, 비율, 인물, 장비, 상태 또는 결론을
+생성하지 마라.
 
-과거 대화에서 보았던 정보라고 하더라도 현재
-[허용된 참고정보]에 없다면 재사용하지 마라.
-
-참고정보에서 제거되거나 회수된 정보를 추측하거나
-복원해서는 안 된다.
+과거 대화에서 제공되었던 정보라도 현재 참고정보에
+없다면 다시 출력하지 마라.
 
 허용된 사실만 간단하고 직접적으로 전달하라.
 """
@@ -649,9 +611,9 @@ class WeightedControlledRAG:
 
         return response.strip()
 
-    # =====================================================
-    # 한 Turn
-    # =====================================================
+    # =================================================
+    # Answer
+    # =================================================
 
     def answer(
         self,
@@ -663,10 +625,6 @@ class WeightedControlledRAG:
         forced_candidate_facts=None,
         as_of=None
     ):
-
-        # -------------------------------------------------
-        # 1. Session + 전체 Exposure History
-        # -------------------------------------------------
 
         self.session_manager.get_session(
             session_id,
@@ -684,10 +642,6 @@ class WeightedControlledRAG:
             )
         )
 
-        # -------------------------------------------------
-        # 2. 현재 Authorization
-        # -------------------------------------------------
-
         authorization_context = (
             self.controller
             .get_authorization_context(
@@ -699,9 +653,19 @@ class WeightedControlledRAG:
             )
         )
 
-        # -------------------------------------------------
-        # 3. Permission-Aware Retrieval
-        # -------------------------------------------------
+        session_before = (
+            self.session_manager
+            .get_session_snapshot(
+                session_id=
+                    session_id,
+
+                user_id=
+                    user_id,
+
+                as_of=
+                    as_of
+            )
+        )
 
         retrieval_results = (
             self.retriever.search(
@@ -715,10 +679,6 @@ class WeightedControlledRAG:
                     top_k
             )
         )
-
-        # -------------------------------------------------
-        # 4. Candidate Fact 추출
-        # -------------------------------------------------
 
         candidate_records = (
             self.collect_fact_candidates(
@@ -736,52 +696,11 @@ class WeightedControlledRAG:
             )
         )
 
-        original_candidate_fact_ids = [
+        candidate_fact_ids = [
             item["fact_id"]
             for item
             in candidate_records
         ]
-
-        # -------------------------------------------------
-        # 5. 권한 만료에 따른 Session Reuse 차단
-        # -------------------------------------------------
-
-        revocation_result = (
-            self.session_manager
-            .filter_revoked_candidates(
-                session_id=
-                    session_id,
-
-                user_id=
-                    user_id,
-
-                candidate_fact_ids=
-                    original_candidate_fact_ids,
-
-                as_of=
-                    as_of
-            )
-        )
-
-        reusable_candidate_fact_ids = (
-            revocation_result[
-                "reusable_candidate_facts"
-            ]
-        )
-
-        revoked_reuse_facts = (
-            revocation_result[
-                "revoked_reuse_facts"
-            ]
-        )
-
-        # -------------------------------------------------
-        # 6. Weighted Incremental Disclosure Control
-        #
-        # Exposure History는 회수하지 않는다.
-        # 즉 과거에 이미 공개된 Fact는 이후 누적위험
-        # 계산에 계속 포함된다.
-        # -------------------------------------------------
 
         control_result = (
             self.controller
@@ -793,14 +712,14 @@ class WeightedControlledRAG:
                     exposed_facts_before,
 
                 candidate_facts=
-                    reusable_candidate_fact_ids,
+                    candidate_fact_ids,
 
                 as_of=
                     as_of
             )
         )
 
-        policy_removed_facts = (
+        removed_fact_ids = (
             control_result[
                 "removed_facts"
             ]
@@ -812,78 +731,21 @@ class WeightedControlledRAG:
             ]
         )
 
-        # -------------------------------------------------
-        # 7. 최종 제거 Fact
-        # -------------------------------------------------
-
-        removed_fact_ids = list(
-            dict.fromkeys(
-                revoked_reuse_facts
-                + policy_removed_facts
-            )
-        )
-
-        # -------------------------------------------------
-        # 8. Utility 다시 계산
-        #
-        # Revocation으로 제거된 Fact도 업무손실에 포함
-        # -------------------------------------------------
-
-        candidate_utility = (
-            self.controller
-            .calculate_utility(
-                original_candidate_fact_ids
-            )
-        )
-
-        removed_utility = (
-            self.controller
-            .calculate_utility(
-                removed_fact_ids
-            )
-        )
-
-        retained_utility = (
-            self.controller
-            .calculate_utility(
-                allowed_fact_ids
-            )
-        )
-
-        if candidate_utility > 0:
-
-            utility_retention_rate = (
-                retained_utility
-                / candidate_utility
-            )
-
-        else:
-
-            utility_retention_rate = 1.0
-
-        # -------------------------------------------------
-        # 9. Safe Context
-        # -------------------------------------------------
-
         safe_context = (
             self.build_safe_context(
                 retrieval_results=
                     retrieval_results,
 
-                original_candidate_fact_ids=
-                    original_candidate_fact_ids,
+                candidate_fact_ids=
+                    candidate_fact_ids,
 
                 allowed_fact_ids=
                     allowed_fact_ids
             )
         )
 
-        # -------------------------------------------------
-        # 10. Draft
-        # -------------------------------------------------
-
         if (
-            original_candidate_fact_ids
+            candidate_fact_ids
             and not allowed_fact_ids
         ):
 
@@ -903,11 +765,7 @@ class WeightedControlledRAG:
                 )
             )
 
-        # -------------------------------------------------
-        # 11. Grounding Guard
-        # -------------------------------------------------
-
-        if original_candidate_fact_ids:
+        if candidate_fact_ids:
 
             guard_result = (
                 self.output_guard
@@ -957,10 +815,6 @@ class WeightedControlledRAG:
             ]
         )
 
-        # -------------------------------------------------
-        # 12. 실제 공개 Fact 기록
-        # -------------------------------------------------
-
         self.session_manager.record_disclosure(
             session_id=
                 session_id,
@@ -975,17 +829,13 @@ class WeightedControlledRAG:
                 exposed_facts_before,
 
             candidate_facts=
-                reusable_candidate_fact_ids,
+                candidate_fact_ids,
 
             as_of=
                 as_of
         )
 
-        # -------------------------------------------------
-        # 13. 갱신된 Session Snapshot
-        # -------------------------------------------------
-
-        session_snapshot = (
+        session_after = (
             self.session_manager
             .get_session_snapshot(
                 session_id=
@@ -999,10 +849,6 @@ class WeightedControlledRAG:
             )
         )
 
-        # -------------------------------------------------
-        # 14. 결과
-        # -------------------------------------------------
-
         return {
             "user_id":
                 user_id,
@@ -1013,8 +859,7 @@ class WeightedControlledRAG:
             "as_of":
                 (
                     str(as_of)
-                    if as_of
-                    is not None
+                    if as_of is not None
                     else None
                 ),
 
@@ -1048,21 +893,30 @@ class WeightedControlledRAG:
             "previously_exposed_facts":
                 exposed_facts_before,
 
-            "revoked_session_facts":
-                session_snapshot[
-                    "revoked_fact_ids"
+            "temporary_rule_ids":
+                session_after[
+                    "temporary_rule_ids"
                 ],
 
-            "revoked_reuse_facts":
-                revoked_reuse_facts,
+            "revoked_rule_ids":
+                session_before[
+                    "revoked_rule_ids"
+                ],
 
             "detected_rules":
                 control_result[
                     "detected_rules"
                 ],
 
-            "policy_removed_facts":
-                policy_removed_facts,
+            "preexisting_violations":
+                control_result[
+                    "preexisting_violations"
+                ],
+
+            "current_response_violations":
+                control_result[
+                    "current_response_violations"
+                ],
 
             "removed_facts":
                 removed_fact_ids,
@@ -1071,16 +925,24 @@ class WeightedControlledRAG:
                 allowed_fact_ids,
 
             "candidate_utility":
-                candidate_utility,
+                control_result[
+                    "candidate_utility"
+                ],
 
             "removed_utility":
-                removed_utility,
+                control_result[
+                    "removed_utility"
+                ],
 
             "retained_utility":
-                retained_utility,
+                control_result[
+                    "retained_utility"
+                ],
 
             "utility_retention_rate":
-                utility_retention_rate,
+                control_result[
+                    "utility_retention_rate"
+                ],
 
             "guard":
                 guard_result,
@@ -1092,20 +954,16 @@ class WeightedControlledRAG:
                 final_response,
 
             "session_exposed_facts":
-                session_snapshot[
+                session_after[
                     "exposed_fact_ids"
                 ],
 
             "session_events":
-                session_snapshot[
+                session_after[
                     "exposure_events"
                 ]
         }
 
-
-# =========================================================
-# 출력 함수
-# =========================================================
 
 def print_result(
     result
@@ -1160,22 +1018,22 @@ def print_result(
     )
 
     print(
-        "\nRevoked Session Facts:"
+        "Temporary Rules:"
     )
 
     print(
         result[
-            "revoked_session_facts"
+            "temporary_rule_ids"
         ]
     )
 
     print(
-        "Revoked Reuse Facts:"
+        "Revoked Rules:"
     )
 
     print(
         result[
-            "revoked_reuse_facts"
+            "revoked_rule_ids"
         ]
     )
 
@@ -1190,17 +1048,27 @@ def print_result(
     )
 
     print(
-        "Policy Removed:"
+        "Preexisting Violations:"
     )
 
     print(
         result[
-            "policy_removed_facts"
+            "preexisting_violations"
         ]
     )
 
     print(
-        "Total Removed:"
+        "Current Response Violations:"
+    )
+
+    print(
+        result[
+            "current_response_violations"
+        ]
+    )
+
+    print(
+        "\nRemoved:"
     )
 
     print(
@@ -1292,18 +1160,14 @@ def print_result(
     )
 
 
-# =========================================================
-# Demonstration
-# =========================================================
-
 if __name__ == "__main__":
 
     rag = WeightedControlledRAG()
 
-    # =====================================================
+    # =================================================
     # TURN 1
-    # 임시권한 활성 중
-    # =====================================================
+    # Temporary Authorization Active
+    # =================================================
 
     print(
         "\n\n"
@@ -1340,10 +1204,10 @@ if __name__ == "__main__":
         result1
     )
 
-    # =====================================================
+    # =================================================
     # TURN 2
-    # 동일 권한 활성 중 재질의
-    # =====================================================
+    # Still Authorized
+    # =================================================
 
     print(
         "\n\n"
@@ -1380,10 +1244,10 @@ if __name__ == "__main__":
         result2
     )
 
-    # =====================================================
+    # =================================================
     # TURN 3
-    # 임시권한 만료
-    # =====================================================
+    # Authorization Expired
+    # =================================================
 
     print(
         "\n\n"
@@ -1418,4 +1282,42 @@ if __name__ == "__main__":
 
     print_result(
         result3
+    )
+
+    # =================================================
+    # TURN 4
+    # 안전한 단일 Fact만 재요청
+    # =================================================
+
+    print(
+        "\n\n"
+        "### TURN 4: "
+        "SAFE SINGLE FACT AFTER EXPIRATION ###"
+    )
+
+    result4 = rag.answer(
+        user_id=
+            "U3",
+
+        session_id=
+            "REVOCATION-DEMO",
+
+        question=(
+            "BLUE 훈련일만 다시 알려줘."
+        ),
+
+        top_k=4,
+
+        forced_candidate_facts=[
+            "OPS001-F2"
+        ],
+
+        as_of=(
+            "2026-09-29T12:40:00"
+            "+09:00"
+        )
+    )
+
+    print_result(
+        result4
     )
