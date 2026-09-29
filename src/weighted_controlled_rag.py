@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 import numpy as np
 import torch
 
@@ -17,29 +14,19 @@ from src.incremental_disclosure import (
     IncrementalDisclosureController
 )
 
+from src.grounding_guard import (
+    GroundedOutputGuard,
+    SAFE_RESPONSE
+)
+
 
 # =====================================================
 # 기본 설정
 # =====================================================
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-
-MODEL_NAME = "Qwen/Qwen2.5-0.5B-Instruct"
-
-SAFE_RESPONSE = (
-    "현재 접근 가능한 정보와 정보결합 정책을 기준으로 "
-    "해당 내용을 제공할 수 없습니다."
+MODEL_NAME = (
+    "Qwen/Qwen2.5-0.5B-Instruct"
 )
-
-
-def load_json(filename):
-    with open(
-        DATA_DIR / filename,
-        "r",
-        encoding="utf-8"
-    ) as f:
-        return json.load(f)
 
 
 # =====================================================
@@ -51,14 +38,20 @@ class WeightedControlledRAG:
     def __init__(self):
 
         # ---------------------------------------------
-        # 1. 문서 및 Retrieval
+        # 1. Permission-Aware Retrieval
         # ---------------------------------------------
 
-        print("Loading permission-aware retriever...")
+        print(
+            "Loading permission-aware retriever..."
+        )
 
-        self.retriever = PermissionAwareRetriever()
+        self.retriever = (
+            PermissionAwareRetriever()
+        )
 
-        self.documents = self.retriever.documents
+        self.documents = (
+            self.retriever.documents
+        )
 
         self.document_map = {
             doc["document_id"]: doc
@@ -66,17 +59,31 @@ class WeightedControlledRAG:
         }
 
         # ---------------------------------------------
-        # 2. 정보결합 통제 알고리즘
+        # 2. Incremental Disclosure Controller
         # ---------------------------------------------
 
-        print("Loading disclosure controller...")
+        print(
+            "Loading disclosure controller..."
+        )
 
         self.controller = (
             IncrementalDisclosureController()
         )
 
         # ---------------------------------------------
-        # 3. Fact Catalog
+        # 3. Grounded Output Guard
+        # ---------------------------------------------
+
+        print(
+            "Loading grounded output guard..."
+        )
+
+        self.output_guard = (
+            GroundedOutputGuard()
+        )
+
+        # ---------------------------------------------
+        # 4. Fact Catalog
         # ---------------------------------------------
 
         self.fact_catalog = (
@@ -84,10 +91,12 @@ class WeightedControlledRAG:
         )
 
         # ---------------------------------------------
-        # 4. LLM
+        # 5. LLM
         # ---------------------------------------------
 
-        print("Loading Qwen...")
+        print(
+            "Loading Qwen..."
+        )
 
         self.tokenizer = (
             AutoTokenizer.from_pretrained(
@@ -108,15 +117,17 @@ class WeightedControlledRAG:
         torch.manual_seed(42)
 
         # ---------------------------------------------
-        # 5. 세션 상태
+        # 6. Session State
         # ---------------------------------------------
 
         self.sessions = {}
 
-        print("Weighted Controlled RAG ready.")
+        print(
+            "Weighted Controlled RAG ready."
+        )
 
     # =================================================
-    # Fact Catalog 생성
+    # Fact Catalog
     # =================================================
 
     def build_fact_catalog(self):
@@ -130,18 +141,27 @@ class WeightedControlledRAG:
                 []
             ):
 
-                fact_id = fact["fact_id"]
+                catalog[
+                    fact["fact_id"]
+                ] = {
+                    "fact_id":
+                        fact["fact_id"],
 
-                catalog[fact_id] = {
-                    "fact_id": fact_id,
-                    "fact": fact["fact"],
-                    "category": fact["category"],
+                    "fact":
+                        fact["fact"],
+
+                    "category":
+                        fact["category"],
+
                     "sensitivity_weight":
                         fact["weight"],
+
                     "document_id":
                         doc["document_id"],
+
                     "document_type":
                         doc["document_type"],
+
                     "title":
                         doc["title"]
                 }
@@ -160,23 +180,29 @@ class WeightedControlledRAG:
 
         if session_id not in self.sessions:
 
-            self.sessions[session_id] = {
-                "user_id": user_id,
-                "exposed_facts": []
+            self.sessions[
+                session_id
+            ] = {
+                "user_id":
+                    user_id,
+
+                "exposed_facts":
+                    []
             }
 
         session = self.sessions[
             session_id
         ]
 
-        # 동일 session_id를 다른 사용자가
-        # 재사용하는 것을 차단한다.
-        if session["user_id"] != user_id:
+        if (
+            session["user_id"]
+            != user_id
+        ):
 
             raise ValueError(
                 "Session user mismatch: "
-                f"{session_id} is bound to "
-                f"{session['user_id']}"
+                f"{session_id} is bound "
+                f"to {session['user_id']}"
             )
 
         return session
@@ -187,10 +213,13 @@ class WeightedControlledRAG:
     ):
 
         if session_id in self.sessions:
-            del self.sessions[session_id]
+
+            del self.sessions[
+                session_id
+            ]
 
     # =================================================
-    # 검색된 문서에서 Fact 후보 수집
+    # Fact 후보 추출
     # =================================================
 
     def collect_fact_candidates(
@@ -203,34 +232,40 @@ class WeightedControlledRAG:
 
         retrieved_ids = {
             result["document_id"]
-            for result in retrieval_results
+            for result
+            in retrieval_results
         }
 
         # ---------------------------------------------
-        # 통제된 실험용 Ground Truth Mode
-        # ---------------------------------------------
-        #
-        # 알고리즘 자체의 효과만 평가할 때는
-        # 사람이 정의한 candidate fact를 입력할 수 있다.
-        #
-        # 단, 실제로 검색된 문서의 Fact만 허용한다.
+        # Ground Truth Mode
         # ---------------------------------------------
 
-        if forced_candidate_facts is not None:
+        if (
+            forced_candidate_facts
+            is not None
+        ):
 
             records = []
 
-            for fact_id in forced_candidate_facts:
+            for fact_id in (
+                forced_candidate_facts
+            ):
 
-                if fact_id not in self.fact_catalog:
+                if (
+                    fact_id
+                    not in self.fact_catalog
+                ):
 
                     raise ValueError(
-                        f"Unknown fact: {fact_id}"
+                        f"Unknown fact: "
+                        f"{fact_id}"
                     )
 
-                record = self.fact_catalog[
-                    fact_id
-                ]
+                record = (
+                    self.fact_catalog[
+                        fact_id
+                    ]
+                )
 
                 if (
                     record["document_id"]
@@ -238,32 +273,32 @@ class WeightedControlledRAG:
                 ):
 
                     raise ValueError(
-                        f"{fact_id} belongs to "
+                        f"{fact_id} belongs "
+                        f"to "
                         f"{record['document_id']}, "
-                        "but that document was "
-                        "not retrieved."
+                        "but that document "
+                        "was not retrieved."
                     )
 
                 records.append(
                     {
                         **record,
-                        "relevance_score": None
+                        "relevance_score":
+                            None
                     }
                 )
 
             return records
 
         # ---------------------------------------------
-        # End-to-End Mode
-        # ---------------------------------------------
-        #
-        # 검색된 문서의 Fact들을 질문과 비교하여
-        # 의미적으로 관련도가 높은 Fact 선택
+        # End-to-End Fact Selection
         # ---------------------------------------------
 
         candidates = []
 
-        for document_id in retrieved_ids:
+        for document_id in (
+            retrieved_ids
+        ):
 
             doc = self.document_map[
                 document_id
@@ -292,7 +327,9 @@ class WeightedControlledRAG:
                             document_id,
 
                         "document_type":
-                            doc["document_type"],
+                            doc[
+                                "document_type"
+                            ],
 
                         "title":
                             doc["title"]
@@ -300,9 +337,9 @@ class WeightedControlledRAG:
                 )
 
         if not candidates:
+
             return []
 
-        # 질문 임베딩
         question_embedding = (
             self.retriever.model.encode(
                 [question],
@@ -310,12 +347,14 @@ class WeightedControlledRAG:
             )[0]
         )
 
-        # Fact 임베딩
         fact_texts = [
             (
-                f"문서 제목: {item['title']}\n"
-                f"사실: {item['fact']}"
+                f"문서 제목: "
+                f"{item['title']}\n"
+                f"사실: "
+                f"{item['fact']}"
             )
+
             for item in candidates
         ]
 
@@ -328,7 +367,10 @@ class WeightedControlledRAG:
 
         scored = []
 
-        for item, embedding in zip(
+        for (
+            item,
+            embedding
+        ) in zip(
             candidates,
             fact_embeddings
         ):
@@ -343,12 +385,14 @@ class WeightedControlledRAG:
             scored.append(
                 {
                     **item,
-                    "relevance_score": score
+                    "relevance_score":
+                        score
                 }
             )
 
         scored.sort(
-            key=lambda x: x["relevance_score"],
+            key=lambda x:
+                x["relevance_score"],
             reverse=True
         )
 
@@ -360,90 +404,160 @@ class WeightedControlledRAG:
         ]
 
     # =================================================
-    # 허용 Fact만으로 안전 Context 구성
+    # 공개문서 Context
     # =================================================
 
-    def build_safe_context(
+    def build_public_context(
         self,
         retrieval_results,
-        allowed_fact_ids
+        max_documents=2
     ):
-
-        allowed_fact_ids = set(
-            allowed_fact_ids
-        )
 
         sections = []
 
         for result in retrieval_results:
 
-            document_id = (
-                result["document_id"]
-            )
-
             doc = self.document_map[
-                document_id
+                result["document_id"]
             ]
 
-            protected_facts = doc.get(
+            # protected_facts가 없는 문서만
+            # 일반 공개문서로 취급
+            if doc.get(
                 "protected_facts",
                 []
-            )
-
-            # -----------------------------------------
-            # 보호 Fact가 없는 일반 공개문서
-            # -----------------------------------------
-
-            if not protected_facts:
-
-                sections.append(
-                    f"[문서 ID: {document_id}]\n"
-                    f"제목: {doc['title']}\n"
-                    f"내용: {doc['content']}"
-                )
-
+            ):
                 continue
 
-            # -----------------------------------------
-            # 보호문서는 허용된 Fact만 전달
-            # -----------------------------------------
+            sections.append(
+                f"[문서 ID: "
+                f"{doc['document_id']}]\n"
+                f"제목: "
+                f"{doc['title']}\n"
+                f"내용: "
+                f"{doc['content']}"
+            )
 
-            allowed_in_document = []
-
-            for fact in protected_facts:
-
-                if (
-                    fact["fact_id"]
-                    in allowed_fact_ids
-                ):
-
-                    allowed_in_document.append(
-                        (
-                            f"[{fact['fact_id']}] "
-                            f"{fact['fact']}"
-                        )
-                    )
-
-            if allowed_in_document:
-
-                sections.append(
-                    f"[문서 ID: {document_id}]\n"
-                    f"제목: {doc['title']}\n"
-                    "허용된 사실:\n"
-                    + "\n".join(
-                        allowed_in_document
-                    )
-                )
+            if (
+                len(sections)
+                >= max_documents
+            ):
+                break
 
         return "\n\n".join(
             sections
         )
 
     # =================================================
-    # Qwen 응답 생성
+    # 허용 Fact만으로 Context 생성
     # =================================================
 
-    def generate_answer(
+    def build_fact_context(
+        self,
+        allowed_fact_ids
+    ):
+
+        if not allowed_fact_ids:
+
+            return ""
+
+        sections = []
+
+        document_groups = {}
+
+        for fact_id in (
+            allowed_fact_ids
+        ):
+
+            record = (
+                self.fact_catalog[
+                    fact_id
+                ]
+            )
+
+            document_id = (
+                record["document_id"]
+            )
+
+            if (
+                document_id
+                not in document_groups
+            ):
+
+                document_groups[
+                    document_id
+                ] = {
+                    "title":
+                        record["title"],
+
+                    "facts":
+                        []
+                }
+
+            document_groups[
+                document_id
+            ]["facts"].append(
+                (
+                    f"[{fact_id}] "
+                    f"{record['fact']}"
+                )
+            )
+
+        for (
+            document_id,
+            data
+        ) in document_groups.items():
+
+            sections.append(
+                f"[문서 ID: "
+                f"{document_id}]\n"
+                f"제목: "
+                f"{data['title']}\n"
+                "허용된 사실:\n"
+                + "\n".join(
+                    data["facts"]
+                )
+            )
+
+        return "\n\n".join(
+            sections
+        )
+
+    # =================================================
+    # 최종 Safe Context
+    # =================================================
+
+    def build_safe_context(
+        self,
+        retrieval_results,
+        candidate_fact_ids,
+        allowed_fact_ids
+    ):
+
+        # 보호 Fact를 대상으로 한 질문이면
+        # 허용된 Fact만 Context에 포함한다.
+        #
+        # 따라서 TEST 1에서 검색된 PUB 문서 내용이
+        # 불필요하게 LLM으로 전달되지 않는다.
+
+        if candidate_fact_ids:
+
+            return self.build_fact_context(
+                allowed_fact_ids
+            )
+
+        # 보호 Fact 후보가 없다면
+        # 정상 공개문서 질의로 처리한다.
+
+        return self.build_public_context(
+            retrieval_results
+        )
+
+    # =================================================
+    # Qwen Draft 생성
+    # =================================================
+
+    def generate_draft(
         self,
         question,
         safe_context
@@ -454,21 +568,25 @@ class WeightedControlledRAG:
             return SAFE_RESPONSE
 
         system_prompt = """
-당신은 합성 국방 업무지원 문서 질의응답 시스템이다.
+당신은 합성 국방 업무지원 질의응답 시스템이다.
 
-반드시 [허용된 참고정보]에 포함된 사실만 사용하여
-답변해야 한다.
+반드시 [허용된 참고정보]에 명시된 사실만 사용하여
+질문에 답변하라.
 
-참고정보에서 제외된 내용은 추측하거나 복원하거나
-유추해서는 안 된다.
+참고정보에 없는 수치, 코드, 날짜, 시간, 비율,
+인물, 장비, 상태 또는 결론을 생성하지 마라.
 
-사용자가 요구했더라도 참고정보에 없는 값,
-코드, 인물, 상태, 수치 또는 결론을 새로 생성하지 마라.
+참고정보에서 제거된 정보를 추측하거나 복원해서는
+안 된다.
 
-제공 가능한 사실만 자연스럽게 답변하라.
+허용된 사실을 가능한 한 간단하고 직접적으로
+사용자에게 전달하라.
 
-질문 전체에 답할 수 없는 경우에도 제공 가능한
-사실만 답변하고, 나머지는 추측하지 마라.
+허용된 사실이 2개라면 두 사실을 모두 반영하고,
+허용된 사실이 1개라면 해당 사실만 답변하라.
+
+질문에 포함되어 있더라도 참고정보에 없는 추가 사실을
+추론하여 만들어내지 마라.
 """
 
         user_prompt = f"""
@@ -476,19 +594,27 @@ class WeightedControlledRAG:
 
 {safe_context}
 
-[사용자 질문]
+[질문]
 
 {question}
+
+위 참고정보에 있는 사실만 이용하여 답변하라.
 """
 
         messages = [
             {
-                "role": "system",
-                "content": system_prompt
+                "role":
+                    "system",
+
+                "content":
+                    system_prompt
             },
             {
-                "role": "user",
-                "content": user_prompt
+                "role":
+                    "user",
+
+                "content":
+                    user_prompt
             }
         ]
 
@@ -500,11 +626,13 @@ class WeightedControlledRAG:
             )
         )
 
-        model_inputs = self.tokenizer(
-            [text],
-            return_tensors="pt"
-        ).to(
-            self.model.device
+        model_inputs = (
+            self.tokenizer(
+                [text],
+                return_tensors="pt"
+            ).to(
+                self.model.device
+            )
         )
 
         with torch.no_grad():
@@ -512,7 +640,7 @@ class WeightedControlledRAG:
             generated_ids = (
                 self.model.generate(
                     **model_inputs,
-                    max_new_tokens=180,
+                    max_new_tokens=150,
                     do_sample=False,
                     pad_token_id=
                         self.tokenizer.eos_token_id
@@ -559,16 +687,23 @@ class WeightedControlledRAG:
     ):
 
         # ---------------------------------------------
-        # 1. Session 가져오기
+        # 1. Session
         # ---------------------------------------------
 
-        session = self.get_session(
-            session_id=session_id,
-            user_id=user_id
+        session = (
+            self.get_session(
+                session_id=
+                    session_id,
+
+                user_id=
+                    user_id
+            )
         )
 
         exposed_facts = list(
-            session["exposed_facts"]
+            session[
+                "exposed_facts"
+            ]
         )
 
         # ---------------------------------------------
@@ -584,15 +719,20 @@ class WeightedControlledRAG:
         )
 
         # ---------------------------------------------
-        # 3. Fact 후보 추출
+        # 3. Candidate Fact Selection
         # ---------------------------------------------
 
         candidate_records = (
             self.collect_fact_candidates(
-                question=question,
+                question=
+                    question,
+
                 retrieval_results=
                     retrieval_results,
-                fact_top_k=fact_top_k,
+
+                fact_top_k=
+                    fact_top_k,
+
                 forced_candidate_facts=
                     forced_candidate_facts
             )
@@ -600,18 +740,22 @@ class WeightedControlledRAG:
 
         candidate_fact_ids = [
             item["fact_id"]
-            for item in candidate_records
+            for item
+            in candidate_records
         ]
 
         # ---------------------------------------------
-        # 4. 가중 최소손실 통제
+        # 4. Weighted Disclosure Control
         # ---------------------------------------------
 
         control_result = (
             self.controller.evaluate_turn(
-                user_id=user_id,
+                user_id=
+                    user_id,
+
                 exposed_facts=
                     exposed_facts,
+
                 candidate_facts=
                     candidate_fact_ids
             )
@@ -630,20 +774,24 @@ class WeightedControlledRAG:
         )
 
         # ---------------------------------------------
-        # 5. 허용 Fact만 Context로 구성
+        # 5. Safe Context 생성
         # ---------------------------------------------
 
         safe_context = (
             self.build_safe_context(
                 retrieval_results=
                     retrieval_results,
+
+                candidate_fact_ids=
+                    candidate_fact_ids,
+
                 allowed_fact_ids=
                     allowed_fact_ids
             )
         )
 
         # ---------------------------------------------
-        # 6. 모든 보호 Fact가 제거된 경우
+        # 6. LLM Draft
         # ---------------------------------------------
 
         if (
@@ -651,26 +799,86 @@ class WeightedControlledRAG:
             and not allowed_fact_ids
         ):
 
-            response = SAFE_RESPONSE
+            draft_response = (
+                SAFE_RESPONSE
+            )
 
         else:
 
-            response = self.generate_answer(
-                question=question,
-                safe_context=safe_context
+            draft_response = (
+                self.generate_draft(
+                    question=
+                        question,
+
+                    safe_context=
+                        safe_context
+                )
             )
 
         # ---------------------------------------------
-        # 7. Session Ledger 갱신
+        # 7. Grounded Output Guard
         # ---------------------------------------------
-        #
-        # 현재 버전에서는 시스템이 실제 공개를
-        # 승인한 Fact를 보수적으로 모두 기록한다.
-        #
-        # 향후 실제 자연어 출력에서 어떤 Fact가
-        # 최종 전달되었는지 검증하는 Output Guard와
-        # 연결할 예정이다.
+
+        if candidate_fact_ids:
+
+            guard_result = (
+                self.output_guard.validate(
+                    question=
+                        question,
+
+                    allowed_fact_ids=
+                        allowed_fact_ids,
+
+                    removed_fact_ids=
+                        removed_fact_ids,
+
+                    draft_response=
+                        draft_response
+                )
+            )
+
+        else:
+
+            # 공개문서 질의는 현재 정보결합 실험의
+            # 직접 평가대상이 아니므로 LLM 결과 유지
+            guard_result = {
+                "guard_triggered":
+                    False,
+
+                "unsupported_tokens":
+                    [],
+
+                "leaked_removed_tokens":
+                    [],
+
+                "missing_allowed_facts":
+                    [],
+
+                "response_mode":
+                    "PUBLIC_LLM",
+
+                "draft_response":
+                    draft_response,
+
+                "final_response":
+                    draft_response
+            }
+
+        final_response = (
+            guard_result[
+                "final_response"
+            ]
+        )
+
         # ---------------------------------------------
+        # 8. Exposure Ledger 갱신
+        # ---------------------------------------------
+
+        # Guard가 최종적으로 공개를 허용한
+        # allowed Fact만 기록한다.
+        #
+        # Grounded fallback 또한 allowed_fact_ids의
+        # 정확한 내용을 전달하므로 동일하게 기록 가능.
 
         updated_exposed = list(
             dict.fromkeys(
@@ -684,7 +892,7 @@ class WeightedControlledRAG:
         ] = updated_exposed
 
         # ---------------------------------------------
-        # 8. 최종 결과
+        # 9. 결과 반환
         # ---------------------------------------------
 
         return {
@@ -757,16 +965,24 @@ class WeightedControlledRAG:
             "safe_context":
                 safe_context,
 
+            "guard":
+                guard_result,
+
+            "draft_response":
+                draft_response,
+
             "response":
-                response
+                final_response
         }
 
 
 # =====================================================
-# 결과 출력 함수
+# 출력
 # =====================================================
 
-def print_result(result):
+def print_result(
+    result
+):
 
     print(
         "\n"
@@ -792,38 +1008,51 @@ def print_result(result):
         "\nRetrieved Documents:"
     )
 
-    for item in result[
-        "retrieved_documents"
-    ]:
+    for item in (
+        result[
+            "retrieved_documents"
+        ]
+    ):
 
         print(
-            f"- {item['document_id']} "
-            f"(score={item['score']:.4f})"
+            f"- "
+            f"{item['document_id']} "
+            f"(score="
+            f"{item['score']:.4f})"
         )
 
     print(
         "\nCandidate Facts:"
     )
 
-    for item in result[
-        "candidate_facts"
-    ]:
+    for item in (
+        result[
+            "candidate_facts"
+        ]
+    ):
 
         score = item[
             "relevance_score"
         ]
 
         if score is None:
-            score_text = "GROUND_TRUTH"
+
+            score_text = (
+                "GROUND_TRUTH"
+            )
+
         else:
+
             score_text = (
                 f"{score:.4f}"
             )
 
         print(
-            f"- {item['fact_id']} | "
+            f"- "
+            f"{item['fact_id']} | "
             f"{item['fact']} | "
-            f"relevance={score_text}"
+            f"relevance="
+            f"{score_text}"
         )
 
     print(
@@ -881,23 +1110,78 @@ def print_result(result):
     )
 
     print(
+        "\nGrounding Guard:"
+    )
+
+    guard = result[
+        "guard"
+    ]
+
+    print(
+        "Triggered:",
+        guard[
+            "guard_triggered"
+        ]
+    )
+
+    print(
+        "Mode:",
+        guard[
+            "response_mode"
+        ]
+    )
+
+    print(
+        "Unsupported Tokens:",
+        guard[
+            "unsupported_tokens"
+        ]
+    )
+
+    print(
+        "Removed-Fact Leakage:",
+        guard[
+            "leaked_removed_tokens"
+        ]
+    )
+
+    print(
+        "Missing Allowed Facts:",
+        guard[
+            "missing_allowed_facts"
+        ]
+    )
+
+    print(
+        "\nDraft Response:"
+    )
+
+    print(
+        result[
+            "draft_response"
+        ]
+    )
+
+    print(
+        "\nFinal Response:"
+    )
+
+    print(
+        result[
+            "response"
+        ]
+    )
+
+    print(
         "\nSession Exposed Facts:",
         result[
             "session_exposed_facts"
         ]
     )
 
-    print(
-        "\nResponse:"
-    )
-
-    print(
-        result["response"]
-    )
-
 
 # =====================================================
-# 실행 Demonstration
+# Demonstration
 # =====================================================
 
 if __name__ == "__main__":
@@ -906,7 +1190,7 @@ if __name__ == "__main__":
 
     # =================================================
     # TEST 1
-    # 같은 Turn에서 가중 최소 업무손실 선택
+    # 가중 최소손실
     # =================================================
 
     print(
@@ -917,15 +1201,17 @@ if __name__ == "__main__":
 
     result = rag.answer(
         user_id="U3",
-        session_id="WEIGHTED-DEMO",
+
+        session_id=
+            "WEIGHTED-DEMO",
+
         question=(
             "BLUE 훈련일과 통신장비 점검률, "
             "추가 확인 대상을 함께 알려줘."
         ),
+
         top_k=4,
 
-        # 알고리즘 자체 검증을 위해
-        # Ground Truth Fact를 사용
         forced_candidate_facts=[
             "OPS001-F2",
             "OPS002-F2",
@@ -939,7 +1225,7 @@ if __name__ == "__main__":
 
     # =================================================
     # TEST 2
-    # 다중턴 누적정보 통제
+    # Multi-Turn
     # =================================================
 
     print(
@@ -948,14 +1234,18 @@ if __name__ == "__main__":
         "Multi-Turn Incremental Disclosure ###"
     )
 
-    # Turn 1
     result_turn1 = rag.answer(
         user_id="U3",
-        session_id="MULTITURN-DEMO",
+
+        session_id=
+            "MULTITURN-DEMO",
+
         question=(
             "BLUE 임무 훈련일을 알려줘."
         ),
+
         top_k=4,
+
         forced_candidate_facts=[
             "OPS001-F2"
         ]
@@ -965,15 +1255,19 @@ if __name__ == "__main__":
         result_turn1
     )
 
-    # Turn 2
     result_turn2 = rag.answer(
         user_id="U3",
-        session_id="MULTITURN-DEMO",
+
+        session_id=
+            "MULTITURN-DEMO",
+
         question=(
             "통신장비 점검률과 "
             "추가 확인 대상도 알려줘."
         ),
+
         top_k=4,
+
         forced_candidate_facts=[
             "OPS002-F2",
             "OPS002-F3"
@@ -986,7 +1280,7 @@ if __name__ == "__main__":
 
     # =================================================
     # TEST 3
-    # 정상 권한 조합은 보존
+    # 정상 권한 정보
     # =================================================
 
     print(
@@ -997,12 +1291,17 @@ if __name__ == "__main__":
 
     result = rag.answer(
         user_id="U4",
-        session_id="AUTHORIZED-DEMO",
+
+        session_id=
+            "AUTHORIZED-DEMO",
+
         question=(
             "NOVA-17 보안 이벤트의 탐지정보와 "
             "AURORA-GATE 인증 실패 현황을 알려줘."
         ),
+
         top_k=5,
+
         forced_candidate_facts=[
             "LOG001-F3",
             "LOG002-F3"
