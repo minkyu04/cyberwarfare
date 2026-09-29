@@ -24,13 +24,12 @@ def load_json(filename):
 
 class GroundedOutputGuard:
     """
-    LLM이 생성한 자연어 응답이 허용된 Fact의 범위를
-    벗어나는지 검사한다.
+    LLM 자연어 응답이 허용된 Fact 범위를 벗어나는지 검사한다.
 
-    주요 기능
-    1. 허용되지 않은 수치/식별자 생성 탐지
-    2. 제거된 Fact의 핵심 토큰 재출력 탐지
-    3. 허용된 Fact가 실제 답변에 반영됐는지 확인
+    기능
+    1. 허용되지 않은 수치 및 식별자 생성 탐지
+    2. 제거된 Fact의 핵심 정보 재출력 탐지
+    3. 허용된 Fact가 실제 답변에 반영됐는지 검사
     4. 검증 실패 시 Fact 기반 결정론적 응답으로 대체
     """
 
@@ -91,50 +90,46 @@ class GroundedOutputGuard:
         ]["fact"]
 
     # =================================================
-    # 비교용 텍스트 정규화
-    # =================================================
-
-    def normalize_text(
-        self,
-        text
-    ):
-
-        text = text.lower()
-
-        text = re.sub(
-            r"\s+",
-            " ",
-            text
-        )
-
-        return text.strip()
-
-    # =================================================
-    # 응답에서 보안상 의미 있는 토큰 추출
+    # Evidence Token 추출
     # =================================================
 
     def extract_evidence_tokens(
         self,
         text
     ):
+        """
+        자연어에서 보안상 검증 가능한 핵심 값을 추출한다.
+
+        Python의 \\b는 Unicode 기준으로 동작하기 때문에
+        'NODE-PAPA입니다', '37회입니다'와 같이
+        한국어 조사가 바로 붙으면 경계 인식에 문제가 생긴다.
+
+        따라서 ASCII 기반 lookaround를 사용한다.
+        """
 
         tokens = set()
 
+        upper_text = text.upper()
+
         # ---------------------------------------------
-        # 코드 / 식별자
-        # ORION-K7
+        # 1. 영문 식별자
+        #
         # NODE-PAPA
+        # NOVA-17
+        # ORION-K7
         # ZXQ-48291
         # ---------------------------------------------
 
         identifier_pattern = (
-            r"\b[A-Z]{2,}"
-            r"(?:-[A-Z0-9]+)+\b"
+            r"(?<![A-Z0-9])"
+            r"([A-Z]{2,}"
+            r"(?:-[A-Z0-9]+)+)"
+            r"(?![A-Z0-9-])"
         )
 
         identifiers = re.findall(
             identifier_pattern,
-            text.upper()
+            upper_text
         )
 
         tokens.update(
@@ -142,44 +137,58 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 퍼센트
+        # 2. 퍼센트
+        #
         # 92%
         # 100%
         # ---------------------------------------------
 
         percentages = re.findall(
-            r"\b\d+(?:\.\d+)?\s*%",
+            r"(?<![\d.])"
+            r"\d+(?:\.\d+)?\s*%",
             text
         )
 
         tokens.update(
-            item.replace(" ", "")
+            item.replace(
+                " ",
+                ""
+            )
             for item in percentages
         )
 
         # ---------------------------------------------
-        # 횟수
+        # 3. 횟수
+        #
         # 37회
+        # 37회입니다
         # ---------------------------------------------
 
         counts = re.findall(
-            r"\b\d+\s*회\b",
+            r"(?<!\d)"
+            r"\d+\s*회",
             text
         )
 
         tokens.update(
-            item.replace(" ", "")
+            item.replace(
+                " ",
+                ""
+            )
             for item in counts
         )
 
         # ---------------------------------------------
-        # 날짜
+        # 4. 날짜
+        #
         # 10월 22일
+        # 10월 22일입니다
         # ---------------------------------------------
 
         dates = re.findall(
-            r"\b\d{1,2}\s*월\s*"
-            r"\d{1,2}\s*일\b",
+            r"(?<!\d)"
+            r"\d{1,2}\s*월\s*"
+            r"\d{1,2}\s*일",
             text
         )
 
@@ -193,13 +202,17 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 시간
+        # 5. 시각
+        #
+        # 02시
         # 02시 14분
+        # 02시 14분입니다
         # ---------------------------------------------
 
         times = re.findall(
-            r"\b\d{1,2}\s*시"
-            r"(?:\s*\d{1,2}\s*분)?\b",
+            r"(?<!\d)"
+            r"\d{1,2}\s*시"
+            r"(?:\s*\d{1,2}\s*분)?",
             text
         )
 
@@ -213,13 +226,18 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 긴 숫자열
-        # LLM이 임의로 생성한 가짜 식별코드 탐지
-        # 예: 0000000000000000
+        # 6. 긴 숫자열
+        #
+        # 00000000
+        # 12345678
+        #
+        # 단, ZXQ-48291 같은 식별자 내부 숫자는 제외
         # ---------------------------------------------
 
         long_numbers = re.findall(
-            r"\b\d{4,}\b",
+            r"(?<![A-Za-z0-9-])"
+            r"\d{4,}"
+            r"(?![A-Za-z0-9-])",
             text
         )
 
@@ -228,12 +246,15 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 16진수 코드
-        # 예: 0x12345678
+        # 7. 16진수 코드
+        #
+        # 0x12345678
         # ---------------------------------------------
 
         hex_codes = re.findall(
-            r"\b0x[0-9a-fA-F]+\b",
+            r"(?<![0-9a-fA-F])"
+            r"0x[0-9a-fA-F]+"
+            r"(?![0-9a-fA-F])",
             text
         )
 
@@ -243,11 +264,18 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 위험등급 표현
+        # 8. 위험등급
+        #
+        # Critical
+        # High
+        # Medium
+        # Low
         # ---------------------------------------------
 
         risk_levels = re.findall(
-            r"\b(?:Critical|High|Medium|Low)\b",
+            r"(?<![A-Za-z])"
+            r"(?:Critical|High|Medium|Low)"
+            r"(?![A-Za-z])",
             text,
             flags=re.IGNORECASE
         )
@@ -260,56 +288,61 @@ class GroundedOutputGuard:
         return tokens
 
     # =================================================
-    # 허용된 Source 구성
+    # 허용된 Fact Token
     # =================================================
 
-    def build_allowed_source(
+    def get_allowed_fact_tokens(
         self,
-        question,
         allowed_fact_ids
     ):
 
-        texts = [
-            question
-        ]
+        tokens = set()
 
         for fact_id in allowed_fact_ids:
 
-            texts.append(
+            fact_text = (
                 self.get_fact_text(
                     fact_id
                 )
             )
 
-        return "\n".join(
-            texts
-        )
+            tokens.update(
+                self.extract_evidence_tokens(
+                    fact_text
+                )
+            )
+
+        return tokens
 
     # =================================================
-    # 제거된 Fact 텍스트 구성
+    # 제거된 Fact Token
     # =================================================
 
-    def build_removed_source(
+    def get_removed_fact_tokens(
         self,
         removed_fact_ids
     ):
 
-        texts = []
+        tokens = set()
 
         for fact_id in removed_fact_ids:
 
-            texts.append(
+            fact_text = (
                 self.get_fact_text(
                     fact_id
                 )
             )
 
-        return "\n".join(
-            texts
-        )
+            tokens.update(
+                self.extract_evidence_tokens(
+                    fact_text
+                )
+            )
+
+        return tokens
 
     # =================================================
-    # 허용 Fact 반영 여부 확인
+    # 허용된 Fact 반영 여부 검사
     # =================================================
 
     def find_missing_allowed_facts(
@@ -340,15 +373,20 @@ class GroundedOutputGuard:
                 )
             )
 
-            # 날짜, 시간, 비율, 코드 등
-            # 식별 가능한 근거가 있는 Fact에 대해서만
-            # 응답 반영 여부를 엄격하게 검사한다.
+            # 현재 Guard는 날짜, 시간, 수치,
+            # 식별자 등 검증 가능한 Evidence Token이
+            # 있는 Fact를 대상으로 한다.
             if not fact_tokens:
                 continue
 
-            if not (
-                fact_tokens
-                & response_tokens
+            # 기존 방식:
+            # 하나라도 겹치면 Fact가 출력된 것으로 판단
+            #
+            # 수정 방식:
+            # Fact의 검증 가능한 핵심 토큰이 모두
+            # 응답에 존재해야 한다.
+            if not fact_tokens.issubset(
+                response_tokens
             ):
 
                 missing.append(
@@ -358,7 +396,7 @@ class GroundedOutputGuard:
         return missing
 
     # =================================================
-    # 결정론적 안전 응답 생성
+    # 결정론적 Grounded Fallback
     # =================================================
 
     def build_grounded_fallback(
@@ -396,24 +434,40 @@ class GroundedOutputGuard:
     ):
 
         # ---------------------------------------------
-        # 허용된 정보의 Evidence Token
+        # 질문에 이미 포함된 정보
+        #
+        # 사용자가 질문에서 직접 제시한 값은
+        # 시스템의 신규 유출로 보지 않는다.
         # ---------------------------------------------
 
-        allowed_source = (
-            self.build_allowed_source(
-                question,
+        question_tokens = (
+            self.extract_evidence_tokens(
+                question
+            )
+        )
+
+        # ---------------------------------------------
+        # 허용된 Fact
+        # ---------------------------------------------
+
+        allowed_fact_tokens = (
+            self.get_allowed_fact_tokens(
                 allowed_fact_ids
             )
         )
 
-        allowed_tokens = (
-            self.extract_evidence_tokens(
-                allowed_source
+        # ---------------------------------------------
+        # 제거된 Fact
+        # ---------------------------------------------
+
+        removed_fact_tokens = (
+            self.get_removed_fact_tokens(
+                removed_fact_ids
             )
         )
 
         # ---------------------------------------------
-        # 실제 응답의 Evidence Token
+        # 실제 LLM 응답
         # ---------------------------------------------
 
         response_tokens = (
@@ -423,46 +477,40 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 허용된 Source에 없던 신규 토큰
+        # 허용되지 않은 신규 Evidence
         # ---------------------------------------------
+
+        supported_tokens = (
+            question_tokens
+            | allowed_fact_tokens
+        )
 
         unsupported_tokens = sorted(
             response_tokens
-            - allowed_tokens
+            - supported_tokens
         )
 
         # ---------------------------------------------
-        # 제거된 Fact의 Evidence Token 검사
+        # 제거된 Fact 재생성 탐지
+        #
+        # 단,
+        # 1. 사용자가 질문에서 이미 제공한 값
+        # 2. 동시에 허용된 다른 Fact에도 포함된 값
+        #
+        # 은 신규 누출로 판단하지 않는다.
         # ---------------------------------------------
-
-        removed_source = (
-            self.build_removed_source(
-                removed_fact_ids
-            )
-        )
-
-        removed_tokens = (
-            self.extract_evidence_tokens(
-                removed_source
-            )
-        )
-
-        question_tokens = (
-            self.extract_evidence_tokens(
-                question
-            )
-        )
 
         leaked_removed_tokens = sorted(
             (
-                removed_tokens
+                removed_fact_tokens
                 & response_tokens
             )
             - question_tokens
+            - allowed_fact_tokens
         )
 
         # ---------------------------------------------
-        # 허용 Fact가 실제 응답에 반영됐는지 검사
+        # 허용된 Fact 누락 여부
         # ---------------------------------------------
 
         missing_allowed_facts = (
@@ -473,11 +521,13 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 차단 조건
+        # Guard 작동 조건
         # ---------------------------------------------
 
         guard_triggered = (
-            bool(unsupported_tokens)
+            bool(
+                unsupported_tokens
+            )
             or bool(
                 leaked_removed_tokens
             )
@@ -487,7 +537,7 @@ class GroundedOutputGuard:
         )
 
         # ---------------------------------------------
-        # 검증 실패 시 결정론적 Fallback 사용
+        # 최종 응답 결정
         # ---------------------------------------------
 
         if guard_triggered:
