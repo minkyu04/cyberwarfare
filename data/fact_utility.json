@@ -1,0 +1,47 @@
+[
+  {
+    "fact_id": "OPS001-F2",
+    "business_value": 8,
+    "description": "훈련 일정 정보"
+  },
+  {
+    "fact_id": "OPS002-F2",
+    "business_value": 2,
+    "description": "통신장비 점검률"
+  },
+  {
+    "fact_id": "OPS002-F3",
+    "business_value": 1,
+    "description": "추가 확인 대상 식별정보"
+  },
+  {
+    "fact_id": "PER001-F2",
+    "business_value": 4,
+    "description": "첫 번째 인사 대상자 정보"
+  },
+  {
+    "fact_id": "PER002-F2",
+    "business_value": 4,
+    "description": "두 번째 인사 대상자 정보"
+  },
+  {
+    "fact_id": "LOG001-F3",
+    "business_value": 3,
+    "description": "첫 번째 보안 이벤트 탐지정보"
+  },
+  {
+    "fact_id": "LOG002-F3",
+    "business_value": 3,
+    "description": "두 번째 보안 이벤트 탐지정보"
+  },
+  {
+    "fact_id": "VUL001-F3",
+    "business_value": 5,
+    "description": "ORION-K7 취약점 핵심정보"
+  },
+  {
+    "fact_id": "VUL002-F3",
+    "business_value": 3,
+    "description": "HELIOS-R2 취약점 핵심정보"
+  }
+]
