@@ -1,6 +1,5 @@
 import argparse
 import json
-import time
 from pathlib import Path
 
 import numpy as np
@@ -50,9 +49,7 @@ SMOKE_SCENARIO_IDS = [
 # JSON
 # ============================================================
 
-def load_json(
-    path
-):
+def load_json(path):
 
     with open(
         path,
@@ -63,9 +60,7 @@ def load_json(
         return json.load(f)
 
 
-def split_pipe(
-    value
-):
+def split_pipe(value):
 
     if value is None:
         return []
@@ -75,15 +70,11 @@ def split_pipe(
             value,
             float
         )
-        and np.isnan(
-            value
-        )
+        and np.isnan(value)
     ):
         return []
 
-    text = str(
-        value
-    ).strip()
+    text = str(value).strip()
 
     if not text:
         return []
@@ -127,14 +118,10 @@ def ensure_full_dataset_active():
         raise FileNotFoundError(
             "data/full_experiment에 "
             "필요한 파일이 없습니다: "
-            + ", ".join(
-                missing
-            )
+            + ", ".join(missing)
         )
 
-    manager = (
-        DatasetManager()
-    )
+    manager = DatasetManager()
 
     if (
         manager.detect_dataset()
@@ -154,16 +141,9 @@ def ensure_full_dataset_active():
         )
 
 
-# ------------------------------------------------------------
-# 매우 중요
-#
-# PilotExperimentRunnerV2를 import하기 전에
-# full dataset을 data/에 활성화한다.
-#
-# 그렇지 않으면 WeightedControlledRAG가
-# 기존 10문서 pilot 데이터를 먼저 읽을 수 있다.
-# ------------------------------------------------------------
-
+# PilotExperimentRunnerV2와 WeightedControlledRAG가
+# import 시 현재 data/를 읽기 때문에
+# full dataset을 먼저 활성화한다.
 ensure_full_dataset_active()
 
 
@@ -216,7 +196,6 @@ class FullExperimentRunner(
                 "'test'여야 합니다."
             )
 
-        # Test는 실수로 돌리지 못하게 잠금
         if (
             split == "test"
             and not allow_test
@@ -249,15 +228,11 @@ class FullExperimentRunner(
 
             raise ValueError(
                 "알 수 없는 조건: "
-                + ", ".join(
-                    invalid
-                )
+                + ", ".join(invalid)
             )
 
         self.split = split
-        self.smoke = bool(
-            smoke
-        )
+        self.smoke = bool(smoke)
 
         self.checkpoint_every = max(
             1,
@@ -278,13 +253,9 @@ class FullExperimentRunner(
 
             if smoke:
 
-                run_name += (
-                    "_smoke"
-                )
+                run_name += "_smoke"
 
-        self.run_name = (
-            run_name
-        )
+        self.run_name = run_name
 
         RESULT_DIR.mkdir(
             parents=True,
@@ -310,10 +281,8 @@ class FullExperimentRunner(
         # Scenario Load
         # ====================================================
 
-        all_scenarios = (
-            load_json(
-                SCENARIO_FILE
-            )
+        all_scenarios = load_json(
+            SCENARIO_FILE
         )
 
         self.scenarios = [
@@ -363,9 +332,7 @@ class FullExperimentRunner(
 
                 raise ValueError(
                     "Smoke scenario 누락: "
-                    + ", ".join(
-                        missing
-                    )
+                    + ", ".join(missing)
                 )
 
             self.scenarios = [
@@ -396,18 +363,14 @@ class FullExperimentRunner(
         # User / Policy
         # ====================================================
 
-        self.users = (
-            load_json(
-                DATA_DIR
-                / "users.json"
-            )
+        self.users = load_json(
+            DATA_DIR
+            / "users.json"
         )
 
-        self.policies = (
-            load_json(
-                DATA_DIR
-                / "policies.json"
-            )
+        self.policies = load_json(
+            DATA_DIR
+            / "policies.json"
         )
 
         self.user_map = {
@@ -424,7 +387,6 @@ class FullExperimentRunner(
         # ====================================================
 
         self._validate_active_dataset()
-
         self._validate_session_order()
 
         # ====================================================
@@ -436,9 +398,7 @@ class FullExperimentRunner(
             "RAG pipeline..."
         )
 
-        self.rag = (
-            WeightedControlledRAG()
-        )
+        self.rag = WeightedControlledRAG()
 
         self.documents = (
             self.rag.documents
@@ -530,7 +490,7 @@ class FullExperimentRunner(
         )
 
         # ====================================================
-        # A-E history
+        # A-E Conversation History
         # ====================================================
 
         self.histories = {
@@ -548,7 +508,7 @@ class FullExperimentRunner(
         }
 
         # ====================================================
-        # Observed facts
+        # Observed Protected Facts
         # ====================================================
 
         self.observed_facts = {
@@ -566,6 +526,20 @@ class FullExperimentRunner(
         self.fact_utility_map = (
             self._load_fact_utility_map()
         )
+
+        if (
+            len(
+                self.fact_utility_map
+            )
+            != 360
+        ):
+
+            print(
+                "WARNING: utility map count =",
+                len(
+                    self.fact_utility_map
+                )
+            )
 
         # ====================================================
         # Ready
@@ -628,6 +602,13 @@ class FullExperimentRunner(
             "Users:",
             len(
                 self.users
+            )
+        )
+
+        print(
+            "Fact utility entries:",
+            len(
+                self.fact_utility_map
             )
         )
 
@@ -775,11 +756,14 @@ class FullExperimentRunner(
 
                     utility = (
                         value.get(
-                            "utility",
+                            "business_value",
                             value.get(
-                                "value",
+                                "utility",
                                 value.get(
-                                    "weight"
+                                    "value",
+                                    value.get(
+                                        "weight"
+                                    )
                                 )
                             )
                         )
@@ -822,11 +806,14 @@ class FullExperimentRunner(
 
                 utility = (
                     item.get(
-                        "utility",
+                        "business_value",
                         item.get(
-                            "value",
+                            "utility",
                             item.get(
-                                "weight"
+                                "value",
+                                item.get(
+                                    "weight"
+                                )
                             )
                         )
                     )
@@ -877,9 +864,7 @@ class FullExperimentRunner(
             row
         ) in detail_df.iterrows():
 
-            item = (
-                row.to_dict()
-            )
+            item = row.to_dict()
 
             scenario = (
                 self.scenario_map[
@@ -1028,7 +1013,7 @@ class FullExperimentRunner(
             )
 
             # ------------------------------------------------
-            # F utility reconstruction
+            # F internal weighted utility
             # ------------------------------------------------
 
             allowed_facts = (
@@ -1445,10 +1430,8 @@ class FullExperimentRunner(
         if not self.rows:
             return
 
-        detail_df = (
-            pd.DataFrame(
-                self.rows
-            )
+        detail_df = pd.DataFrame(
+            self.rows
         )
 
         detail_df = (
@@ -1562,10 +1545,8 @@ def preflight(
             "--allow-test가 필요합니다."
         )
 
-    scenarios = (
-        load_json(
-            SCENARIO_FILE
-        )
+    scenarios = load_json(
+        SCENARIO_FILE
     )
 
     selected = [
@@ -1650,12 +1631,10 @@ def preflight(
 
 def parse_args():
 
-    parser = (
-        argparse.ArgumentParser(
-            description=(
-                "Full synthetic "
-                "A-F experiment runner"
-            )
+    parser = argparse.ArgumentParser(
+        description=(
+            "Full synthetic "
+            "A-F experiment runner"
         )
     )
 
@@ -1712,9 +1691,7 @@ def parse_args():
 
 def main():
 
-    args = (
-        parse_args()
-    )
+    args = parse_args()
 
     if (
         args.preflight_only
@@ -1733,26 +1710,24 @@ def main():
 
         return
 
-    runner = (
-        FullExperimentRunner(
-            split=
-                args.split,
+    runner = FullExperimentRunner(
+        split=
+            args.split,
 
-            conditions=
-                args.conditions,
+        conditions=
+            args.conditions,
 
-            smoke=
-                args.smoke,
+        smoke=
+            args.smoke,
 
-            allow_test=
-                args.allow_test,
+        allow_test=
+            args.allow_test,
 
-            run_name=
-                args.run_name,
+        run_name=
+            args.run_name,
 
-            checkpoint_every=
-                args.checkpoint_every
-        )
+        checkpoint_every=
+            args.checkpoint_every
     )
 
     runner.run()
