@@ -1,0 +1,1802 @@
+[
+  {
+    "fact_id": "PER001-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 001 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER001-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 001 / personnel_identity"
+  },
+  {
+    "fact_id": "PER001-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 001 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER002-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 002 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER002-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 002 / personnel_identity"
+  },
+  {
+    "fact_id": "PER002-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 002 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER003-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 003 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER003-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 003 / personnel_identity"
+  },
+  {
+    "fact_id": "PER003-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 003 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER004-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 004 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER004-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 004 / personnel_identity"
+  },
+  {
+    "fact_id": "PER004-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 004 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER005-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 005 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER005-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 005 / personnel_identity"
+  },
+  {
+    "fact_id": "PER005-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 005 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER006-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 006 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER006-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 006 / personnel_identity"
+  },
+  {
+    "fact_id": "PER006-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 006 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER007-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 007 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER007-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 007 / personnel_identity"
+  },
+  {
+    "fact_id": "PER007-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 007 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER008-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 008 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER008-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 008 / personnel_identity"
+  },
+  {
+    "fact_id": "PER008-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 008 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER009-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 009 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER009-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 009 / personnel_identity"
+  },
+  {
+    "fact_id": "PER009-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 009 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER010-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 010 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER010-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 010 / personnel_identity"
+  },
+  {
+    "fact_id": "PER010-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 010 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER011-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 011 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER011-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 011 / personnel_identity"
+  },
+  {
+    "fact_id": "PER011-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 011 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER012-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 012 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER012-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 012 / personnel_identity"
+  },
+  {
+    "fact_id": "PER012-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 012 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER013-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 013 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER013-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 013 / personnel_identity"
+  },
+  {
+    "fact_id": "PER013-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 013 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER014-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 014 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER014-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 014 / personnel_identity"
+  },
+  {
+    "fact_id": "PER014-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 014 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER015-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 015 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER015-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 015 / personnel_identity"
+  },
+  {
+    "fact_id": "PER015-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 015 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER016-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 016 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER016-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 016 / personnel_identity"
+  },
+  {
+    "fact_id": "PER016-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 016 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER017-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 017 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER017-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 017 / personnel_identity"
+  },
+  {
+    "fact_id": "PER017-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 017 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER018-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 018 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER018-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 018 / personnel_identity"
+  },
+  {
+    "fact_id": "PER018-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 018 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER019-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 019 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER019-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 019 / personnel_identity"
+  },
+  {
+    "fact_id": "PER019-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 019 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER020-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 020 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER020-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 020 / personnel_identity"
+  },
+  {
+    "fact_id": "PER020-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 020 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER021-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 021 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER021-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 021 / personnel_identity"
+  },
+  {
+    "fact_id": "PER021-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 021 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER022-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 022 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER022-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 022 / personnel_identity"
+  },
+  {
+    "fact_id": "PER022-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 022 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER023-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 023 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER023-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 023 / personnel_identity"
+  },
+  {
+    "fact_id": "PER023-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 023 / personnel_schedule"
+  },
+  {
+    "fact_id": "PER024-F1",
+    "business_value": 2,
+    "description": "합성 인사행정 문서 024 / personnel_metadata"
+  },
+  {
+    "fact_id": "PER024-F2",
+    "business_value": 4,
+    "description": "합성 인사행정 문서 024 / personnel_identity"
+  },
+  {
+    "fact_id": "PER024-F3",
+    "business_value": 5,
+    "description": "합성 인사행정 문서 024 / personnel_schedule"
+  },
+  {
+    "fact_id": "OPS001-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 001 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS001-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 001 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS001-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 001 / equipment_status"
+  },
+  {
+    "fact_id": "OPS001-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 001 / operation_node"
+  },
+  {
+    "fact_id": "OPS002-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 002 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS002-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 002 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS002-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 002 / equipment_status"
+  },
+  {
+    "fact_id": "OPS002-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 002 / operation_node"
+  },
+  {
+    "fact_id": "OPS003-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 003 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS003-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 003 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS003-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 003 / equipment_status"
+  },
+  {
+    "fact_id": "OPS003-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 003 / operation_node"
+  },
+  {
+    "fact_id": "OPS004-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 004 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS004-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 004 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS004-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 004 / equipment_status"
+  },
+  {
+    "fact_id": "OPS004-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 004 / operation_node"
+  },
+  {
+    "fact_id": "OPS005-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 005 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS005-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 005 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS005-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 005 / equipment_status"
+  },
+  {
+    "fact_id": "OPS005-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 005 / operation_node"
+  },
+  {
+    "fact_id": "OPS006-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 006 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS006-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 006 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS006-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 006 / equipment_status"
+  },
+  {
+    "fact_id": "OPS006-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 006 / operation_node"
+  },
+  {
+    "fact_id": "OPS007-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 007 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS007-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 007 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS007-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 007 / equipment_status"
+  },
+  {
+    "fact_id": "OPS007-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 007 / operation_node"
+  },
+  {
+    "fact_id": "OPS008-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 008 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS008-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 008 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS008-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 008 / equipment_status"
+  },
+  {
+    "fact_id": "OPS008-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 008 / operation_node"
+  },
+  {
+    "fact_id": "OPS009-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 009 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS009-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 009 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS009-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 009 / equipment_status"
+  },
+  {
+    "fact_id": "OPS009-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 009 / operation_node"
+  },
+  {
+    "fact_id": "OPS010-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 010 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS010-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 010 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS010-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 010 / equipment_status"
+  },
+  {
+    "fact_id": "OPS010-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 010 / operation_node"
+  },
+  {
+    "fact_id": "OPS011-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 011 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS011-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 011 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS011-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 011 / equipment_status"
+  },
+  {
+    "fact_id": "OPS011-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 011 / operation_node"
+  },
+  {
+    "fact_id": "OPS012-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 012 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS012-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 012 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS012-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 012 / equipment_status"
+  },
+  {
+    "fact_id": "OPS012-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 012 / operation_node"
+  },
+  {
+    "fact_id": "OPS013-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 013 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS013-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 013 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS013-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 013 / equipment_status"
+  },
+  {
+    "fact_id": "OPS013-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 013 / operation_node"
+  },
+  {
+    "fact_id": "OPS014-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 014 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS014-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 014 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS014-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 014 / equipment_status"
+  },
+  {
+    "fact_id": "OPS014-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 014 / operation_node"
+  },
+  {
+    "fact_id": "OPS015-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 015 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS015-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 015 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS015-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 015 / equipment_status"
+  },
+  {
+    "fact_id": "OPS015-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 015 / operation_node"
+  },
+  {
+    "fact_id": "OPS016-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 016 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS016-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 016 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS016-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 016 / equipment_status"
+  },
+  {
+    "fact_id": "OPS016-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 016 / operation_node"
+  },
+  {
+    "fact_id": "OPS017-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 017 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS017-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 017 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS017-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 017 / equipment_status"
+  },
+  {
+    "fact_id": "OPS017-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 017 / operation_node"
+  },
+  {
+    "fact_id": "OPS018-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 018 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS018-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 018 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS018-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 018 / equipment_status"
+  },
+  {
+    "fact_id": "OPS018-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 018 / operation_node"
+  },
+  {
+    "fact_id": "OPS019-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 019 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS019-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 019 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS019-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 019 / equipment_status"
+  },
+  {
+    "fact_id": "OPS019-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 019 / operation_node"
+  },
+  {
+    "fact_id": "OPS020-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 020 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS020-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 020 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS020-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 020 / equipment_status"
+  },
+  {
+    "fact_id": "OPS020-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 020 / operation_node"
+  },
+  {
+    "fact_id": "OPS021-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 021 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS021-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 021 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS021-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 021 / equipment_status"
+  },
+  {
+    "fact_id": "OPS021-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 021 / operation_node"
+  },
+  {
+    "fact_id": "OPS022-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 022 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS022-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 022 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS022-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 022 / equipment_status"
+  },
+  {
+    "fact_id": "OPS022-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 022 / operation_node"
+  },
+  {
+    "fact_id": "OPS023-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 023 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS023-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 023 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS023-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 023 / equipment_status"
+  },
+  {
+    "fact_id": "OPS023-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 023 / operation_node"
+  },
+  {
+    "fact_id": "OPS024-F1",
+    "business_value": 4,
+    "description": "합성 BLUE 운영문서 024 / operation_identifier"
+  },
+  {
+    "fact_id": "OPS024-F2",
+    "business_value": 8,
+    "description": "합성 BLUE 운영문서 024 / operation_schedule"
+  },
+  {
+    "fact_id": "OPS024-F3",
+    "business_value": 2,
+    "description": "합성 BLUE 운영문서 024 / equipment_status"
+  },
+  {
+    "fact_id": "OPS024-F4",
+    "business_value": 1,
+    "description": "합성 BLUE 운영문서 024 / operation_node"
+  },
+  {
+    "fact_id": "LOG001-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 001 / security_event_id"
+  },
+  {
+    "fact_id": "LOG001-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 001 / security_source"
+  },
+  {
+    "fact_id": "LOG001-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 001 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG001-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 001 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG002-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 002 / security_event_id"
+  },
+  {
+    "fact_id": "LOG002-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 002 / security_source"
+  },
+  {
+    "fact_id": "LOG002-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 002 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG002-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 002 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG003-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 003 / security_event_id"
+  },
+  {
+    "fact_id": "LOG003-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 003 / security_source"
+  },
+  {
+    "fact_id": "LOG003-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 003 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG003-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 003 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG004-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 004 / security_event_id"
+  },
+  {
+    "fact_id": "LOG004-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 004 / security_source"
+  },
+  {
+    "fact_id": "LOG004-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 004 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG004-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 004 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG005-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 005 / security_event_id"
+  },
+  {
+    "fact_id": "LOG005-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 005 / security_source"
+  },
+  {
+    "fact_id": "LOG005-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 005 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG005-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 005 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG006-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 006 / security_event_id"
+  },
+  {
+    "fact_id": "LOG006-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 006 / security_source"
+  },
+  {
+    "fact_id": "LOG006-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 006 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG006-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 006 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG007-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 007 / security_event_id"
+  },
+  {
+    "fact_id": "LOG007-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 007 / security_source"
+  },
+  {
+    "fact_id": "LOG007-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 007 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG007-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 007 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG008-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 008 / security_event_id"
+  },
+  {
+    "fact_id": "LOG008-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 008 / security_source"
+  },
+  {
+    "fact_id": "LOG008-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 008 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG008-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 008 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG009-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 009 / security_event_id"
+  },
+  {
+    "fact_id": "LOG009-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 009 / security_source"
+  },
+  {
+    "fact_id": "LOG009-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 009 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG009-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 009 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG010-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 010 / security_event_id"
+  },
+  {
+    "fact_id": "LOG010-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 010 / security_source"
+  },
+  {
+    "fact_id": "LOG010-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 010 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG010-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 010 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG011-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 011 / security_event_id"
+  },
+  {
+    "fact_id": "LOG011-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 011 / security_source"
+  },
+  {
+    "fact_id": "LOG011-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 011 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG011-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 011 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG012-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 012 / security_event_id"
+  },
+  {
+    "fact_id": "LOG012-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 012 / security_source"
+  },
+  {
+    "fact_id": "LOG012-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 012 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG012-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 012 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG013-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 013 / security_event_id"
+  },
+  {
+    "fact_id": "LOG013-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 013 / security_source"
+  },
+  {
+    "fact_id": "LOG013-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 013 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG013-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 013 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG014-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 014 / security_event_id"
+  },
+  {
+    "fact_id": "LOG014-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 014 / security_source"
+  },
+  {
+    "fact_id": "LOG014-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 014 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG014-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 014 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG015-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 015 / security_event_id"
+  },
+  {
+    "fact_id": "LOG015-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 015 / security_source"
+  },
+  {
+    "fact_id": "LOG015-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 015 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG015-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 015 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG016-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 016 / security_event_id"
+  },
+  {
+    "fact_id": "LOG016-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 016 / security_source"
+  },
+  {
+    "fact_id": "LOG016-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 016 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG016-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 016 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG017-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 017 / security_event_id"
+  },
+  {
+    "fact_id": "LOG017-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 017 / security_source"
+  },
+  {
+    "fact_id": "LOG017-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 017 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG017-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 017 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG018-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 018 / security_event_id"
+  },
+  {
+    "fact_id": "LOG018-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 018 / security_source"
+  },
+  {
+    "fact_id": "LOG018-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 018 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG018-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 018 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG019-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 019 / security_event_id"
+  },
+  {
+    "fact_id": "LOG019-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 019 / security_source"
+  },
+  {
+    "fact_id": "LOG019-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 019 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG019-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 019 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG020-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 020 / security_event_id"
+  },
+  {
+    "fact_id": "LOG020-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 020 / security_source"
+  },
+  {
+    "fact_id": "LOG020-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 020 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG020-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 020 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG021-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 021 / security_event_id"
+  },
+  {
+    "fact_id": "LOG021-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 021 / security_source"
+  },
+  {
+    "fact_id": "LOG021-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 021 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG021-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 021 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG022-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 022 / security_event_id"
+  },
+  {
+    "fact_id": "LOG022-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 022 / security_source"
+  },
+  {
+    "fact_id": "LOG022-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 022 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG022-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 022 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG023-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 023 / security_event_id"
+  },
+  {
+    "fact_id": "LOG023-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 023 / security_source"
+  },
+  {
+    "fact_id": "LOG023-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 023 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG023-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 023 / authentication_failure"
+  },
+  {
+    "fact_id": "LOG024-F1",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 024 / security_event_id"
+  },
+  {
+    "fact_id": "LOG024-F2",
+    "business_value": 2,
+    "description": "합성 보안 이벤트 로그 024 / security_source"
+  },
+  {
+    "fact_id": "LOG024-F3",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 024 / security_detection_time"
+  },
+  {
+    "fact_id": "LOG024-F4",
+    "business_value": 3,
+    "description": "합성 보안 이벤트 로그 024 / authentication_failure"
+  },
+  {
+    "fact_id": "VUL001-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 001 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL001-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 001 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL001-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 001 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL001-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 001 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL002-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 002 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL002-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 002 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL002-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 002 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL002-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 002 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL003-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 003 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL003-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 003 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL003-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 003 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL003-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 003 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL004-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 004 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL004-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 004 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL004-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 004 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL004-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 004 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL005-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 005 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL005-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 005 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL005-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 005 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL005-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 005 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL006-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 006 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL006-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 006 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL006-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 006 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL006-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 006 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL007-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 007 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL007-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 007 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL007-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 007 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL007-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 007 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL008-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 008 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL008-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 008 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL008-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 008 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL008-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 008 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL009-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 009 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL009-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 009 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL009-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 009 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL009-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 009 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL010-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 010 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL010-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 010 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL010-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 010 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL010-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 010 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL011-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 011 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL011-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 011 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL011-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 011 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL011-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 011 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL012-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 012 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL012-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 012 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL012-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 012 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL012-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 012 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL013-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 013 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL013-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 013 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL013-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 013 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL013-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 013 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL014-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 014 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL014-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 014 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL014-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 014 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL014-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 014 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL015-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 015 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL015-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 015 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL015-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 015 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL015-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 015 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL016-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 016 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL016-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 016 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL016-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 016 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL016-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 016 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL017-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 017 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL017-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 017 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL017-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 017 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL017-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 017 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL018-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 018 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL018-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 018 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL018-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 018 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL018-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 018 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL019-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 019 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL019-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 019 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL019-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 019 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL019-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 019 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL020-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 020 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL020-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 020 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL020-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 020 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL020-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 020 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL021-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 021 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL021-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 021 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL021-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 021 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL021-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 021 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL022-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 022 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL022-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 022 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL022-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 022 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL022-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 022 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL023-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 023 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL023-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 023 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL023-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 023 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL023-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 023 / vulnerability_tracking"
+  },
+  {
+    "fact_id": "VUL024-F1",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 024 / vulnerability_module"
+  },
+  {
+    "fact_id": "VUL024-F2",
+    "business_value": 4,
+    "description": "합성 취약점 점검 보고서 024 / vulnerability_account"
+  },
+  {
+    "fact_id": "VUL024-F3",
+    "business_value": 5,
+    "description": "합성 취약점 점검 보고서 024 / vulnerability_core"
+  },
+  {
+    "fact_id": "VUL024-F4",
+    "business_value": 3,
+    "description": "합성 취약점 점검 보고서 024 / vulnerability_tracking"
+  }
+]

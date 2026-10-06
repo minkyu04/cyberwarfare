@@ -1,0 +1,74 @@
+[
+  {
+    "authorization_id": "TA-OPS-01",
+    "user_id": "O01",
+    "description": "BLUE 합성 임무 수행을 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T09:00:00+09:00",
+    "valid_until": "2026-09-29T12:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "BLUE"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-OPS-02",
+    "user_id": "O02",
+    "description": "BLUE 합성 임무 수행을 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T09:00:00+09:00",
+    "valid_until": "2026-09-29T12:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "BLUE"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-OPS-03",
+    "user_id": "O03",
+    "description": "BLUE 합성 임무 수행을 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T09:00:00+09:00",
+    "valid_until": "2026-09-29T12:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "BLUE"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-CYBER-01",
+    "user_id": "S01",
+    "description": "CYBER_COMMAND 합성 분석임무를 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T14:00:00+09:00",
+    "valid_until": "2026-09-29T16:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "CYBER_COMMAND"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-CYBER-02",
+    "user_id": "S02",
+    "description": "CYBER_COMMAND 합성 분석임무를 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T14:00:00+09:00",
+    "valid_until": "2026-09-29T16:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "CYBER_COMMAND"
+    ],
+    "enabled": true
+  },
+  {
+    "authorization_id": "TA-CYBER-03",
+    "user_id": "S03",
+    "description": "CYBER_COMMAND 합성 분석임무를 위한 실험용 임시권한",
+    "valid_from": "2026-09-29T14:00:00+09:00",
+    "valid_until": "2026-09-29T16:00:00+09:00",
+    "temporary_clearance": 3,
+    "temporary_missions": [
+      "CYBER_COMMAND"
+    ],
+    "enabled": true
+  }
+]

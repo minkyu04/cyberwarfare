@@ -1,0 +1,842 @@
+[
+  {
+    "rule_id": "IR-001",
+    "description": "합성 인사 대상자 종합정보 001-002",
+    "required_facts": [
+      "PER001-F2",
+      "PER002-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-002",
+    "description": "합성 인사 대상자 종합정보 003-004",
+    "required_facts": [
+      "PER003-F2",
+      "PER004-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-003",
+    "description": "합성 인사 대상자 종합정보 005-006",
+    "required_facts": [
+      "PER005-F2",
+      "PER006-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-004",
+    "description": "합성 인사 대상자 종합정보 007-008",
+    "required_facts": [
+      "PER007-F2",
+      "PER008-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-005",
+    "description": "합성 인사 대상자 종합정보 009-010",
+    "required_facts": [
+      "PER009-F2",
+      "PER010-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-006",
+    "description": "합성 인사 대상자 종합정보 011-012",
+    "required_facts": [
+      "PER011-F2",
+      "PER012-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-007",
+    "description": "합성 인사 대상자 종합정보 013-014",
+    "required_facts": [
+      "PER013-F2",
+      "PER014-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-008",
+    "description": "합성 인사 대상자 종합정보 015-016",
+    "required_facts": [
+      "PER015-F2",
+      "PER016-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-009",
+    "description": "합성 인사 대상자 종합정보 017-018",
+    "required_facts": [
+      "PER017-F2",
+      "PER018-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-010",
+    "description": "합성 인사 대상자 종합정보 019-020",
+    "required_facts": [
+      "PER019-F2",
+      "PER020-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-011",
+    "description": "합성 인사 대상자 종합정보 021-022",
+    "required_facts": [
+      "PER021-F2",
+      "PER022-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-012",
+    "description": "합성 인사 대상자 종합정보 023-024",
+    "required_facts": [
+      "PER023-F2",
+      "PER024-F2"
+    ],
+    "derived_information": "복수 인사 대상자의 결합 식별정보",
+    "required_clearance": 2,
+    "allowed_missions": [
+      "ADMIN"
+    ],
+    "domain": "personnel"
+  },
+  {
+    "rule_id": "IR-013",
+    "description": "BLUE 일정-점검률 종합정보 001-002",
+    "required_facts": [
+      "OPS001-F2",
+      "OPS002-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-014",
+    "description": "BLUE 일정-대상 종합정보 001-002",
+    "required_facts": [
+      "OPS001-F2",
+      "OPS002-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-015",
+    "description": "BLUE 일정-점검률 종합정보 003-004",
+    "required_facts": [
+      "OPS003-F2",
+      "OPS004-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-016",
+    "description": "BLUE 일정-대상 종합정보 003-004",
+    "required_facts": [
+      "OPS003-F2",
+      "OPS004-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-017",
+    "description": "BLUE 일정-점검률 종합정보 005-006",
+    "required_facts": [
+      "OPS005-F2",
+      "OPS006-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-018",
+    "description": "BLUE 일정-대상 종합정보 005-006",
+    "required_facts": [
+      "OPS005-F2",
+      "OPS006-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-019",
+    "description": "BLUE 일정-점검률 종합정보 007-008",
+    "required_facts": [
+      "OPS007-F2",
+      "OPS008-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-020",
+    "description": "BLUE 일정-대상 종합정보 007-008",
+    "required_facts": [
+      "OPS007-F2",
+      "OPS008-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-021",
+    "description": "BLUE 일정-점검률 종합정보 009-010",
+    "required_facts": [
+      "OPS009-F2",
+      "OPS010-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-022",
+    "description": "BLUE 일정-대상 종합정보 009-010",
+    "required_facts": [
+      "OPS009-F2",
+      "OPS010-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-023",
+    "description": "BLUE 일정-점검률 종합정보 011-012",
+    "required_facts": [
+      "OPS011-F2",
+      "OPS012-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-024",
+    "description": "BLUE 일정-대상 종합정보 011-012",
+    "required_facts": [
+      "OPS011-F2",
+      "OPS012-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-025",
+    "description": "BLUE 일정-점검률 종합정보 013-014",
+    "required_facts": [
+      "OPS013-F2",
+      "OPS014-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-026",
+    "description": "BLUE 일정-대상 종합정보 013-014",
+    "required_facts": [
+      "OPS013-F2",
+      "OPS014-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-027",
+    "description": "BLUE 일정-점검률 종합정보 015-016",
+    "required_facts": [
+      "OPS015-F2",
+      "OPS016-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-028",
+    "description": "BLUE 일정-대상 종합정보 015-016",
+    "required_facts": [
+      "OPS015-F2",
+      "OPS016-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-029",
+    "description": "BLUE 일정-점검률 종합정보 017-018",
+    "required_facts": [
+      "OPS017-F2",
+      "OPS018-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-030",
+    "description": "BLUE 일정-대상 종합정보 017-018",
+    "required_facts": [
+      "OPS017-F2",
+      "OPS018-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-031",
+    "description": "BLUE 일정-점검률 종합정보 019-020",
+    "required_facts": [
+      "OPS019-F2",
+      "OPS020-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-032",
+    "description": "BLUE 일정-대상 종합정보 019-020",
+    "required_facts": [
+      "OPS019-F2",
+      "OPS020-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-033",
+    "description": "BLUE 일정-점검률 종합정보 021-022",
+    "required_facts": [
+      "OPS021-F2",
+      "OPS022-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-034",
+    "description": "BLUE 일정-대상 종합정보 021-022",
+    "required_facts": [
+      "OPS021-F2",
+      "OPS022-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-035",
+    "description": "BLUE 일정-점검률 종합정보 023-024",
+    "required_facts": [
+      "OPS023-F2",
+      "OPS024-F3"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 장비 점검률 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-036",
+    "description": "BLUE 일정-대상 종합정보 023-024",
+    "required_facts": [
+      "OPS023-F2",
+      "OPS024-F4"
+    ],
+    "derived_information": "BLUE 임무의 일정 및 추가 확인 대상 결합정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "BLUE"
+    ],
+    "domain": "operations"
+  },
+  {
+    "rule_id": "IR-037",
+    "description": "보안이벤트 시각-실패횟수 종합 001-002",
+    "required_facts": [
+      "LOG001-F3",
+      "LOG002-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-038",
+    "description": "보안이벤트 시각-실패횟수 종합 003-004",
+    "required_facts": [
+      "LOG003-F3",
+      "LOG004-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-039",
+    "description": "보안이벤트 시각-실패횟수 종합 005-006",
+    "required_facts": [
+      "LOG005-F3",
+      "LOG006-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-040",
+    "description": "보안이벤트 시각-실패횟수 종합 007-008",
+    "required_facts": [
+      "LOG007-F3",
+      "LOG008-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-041",
+    "description": "보안이벤트 시각-실패횟수 종합 009-010",
+    "required_facts": [
+      "LOG009-F3",
+      "LOG010-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-042",
+    "description": "보안이벤트 시각-실패횟수 종합 011-012",
+    "required_facts": [
+      "LOG011-F3",
+      "LOG012-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-043",
+    "description": "보안이벤트 시각-실패횟수 종합 013-014",
+    "required_facts": [
+      "LOG013-F3",
+      "LOG014-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-044",
+    "description": "보안이벤트 시각-실패횟수 종합 015-016",
+    "required_facts": [
+      "LOG015-F3",
+      "LOG016-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-045",
+    "description": "보안이벤트 시각-실패횟수 종합 017-018",
+    "required_facts": [
+      "LOG017-F3",
+      "LOG018-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-046",
+    "description": "보안이벤트 시각-실패횟수 종합 019-020",
+    "required_facts": [
+      "LOG019-F3",
+      "LOG020-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-047",
+    "description": "보안이벤트 시각-실패횟수 종합 021-022",
+    "required_facts": [
+      "LOG021-F3",
+      "LOG022-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-048",
+    "description": "보안이벤트 시각-실패횟수 종합 023-024",
+    "required_facts": [
+      "LOG023-F3",
+      "LOG024-F4"
+    ],
+    "derived_information": "복수 보안 이벤트의 시간·인증실패 결합정보",
+    "required_clearance": 4,
+    "allowed_missions": [
+      "CYBER"
+    ],
+    "domain": "security_log"
+  },
+  {
+    "rule_id": "IR-049",
+    "description": "합성 취약점 종합정보 001-002",
+    "required_facts": [
+      "VUL001-F3",
+      "VUL002-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-050",
+    "description": "합성 취약점 종합정보 003-004",
+    "required_facts": [
+      "VUL003-F3",
+      "VUL004-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-051",
+    "description": "합성 취약점 종합정보 005-006",
+    "required_facts": [
+      "VUL005-F3",
+      "VUL006-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-052",
+    "description": "합성 취약점 종합정보 007-008",
+    "required_facts": [
+      "VUL007-F3",
+      "VUL008-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-053",
+    "description": "합성 취약점 종합정보 009-010",
+    "required_facts": [
+      "VUL009-F3",
+      "VUL010-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-054",
+    "description": "합성 취약점 종합정보 011-012",
+    "required_facts": [
+      "VUL011-F3",
+      "VUL012-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-055",
+    "description": "합성 취약점 종합정보 013-014",
+    "required_facts": [
+      "VUL013-F3",
+      "VUL014-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-056",
+    "description": "합성 취약점 종합정보 015-016",
+    "required_facts": [
+      "VUL015-F3",
+      "VUL016-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-057",
+    "description": "합성 취약점 종합정보 017-018",
+    "required_facts": [
+      "VUL017-F3",
+      "VUL018-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-058",
+    "description": "합성 취약점 종합정보 019-020",
+    "required_facts": [
+      "VUL019-F3",
+      "VUL020-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-059",
+    "description": "합성 취약점 종합정보 021-022",
+    "required_facts": [
+      "VUL021-F3",
+      "VUL022-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  },
+  {
+    "rule_id": "IR-060",
+    "description": "합성 취약점 종합정보 023-024",
+    "required_facts": [
+      "VUL023-F3",
+      "VUL024-F3"
+    ],
+    "derived_information": "복수 취약점 점검결과의 종합 위험정보",
+    "required_clearance": 3,
+    "allowed_missions": [
+      "CYBER_COMMAND"
+    ],
+    "domain": "vulnerability"
+  }
+]

@@ -1,0 +1,67 @@
+{
+  "dataset_name": "Synthetic Defense-Network LLM Access Control Dataset",
+  "dataset_version": "1.0",
+  "random_seed": 20261006,
+  "purpose": "권한 기반 RAG, 정보결합 통제, 다중턴 누출, 동적 권한 및 출력 검증의 비교 실험을 위한 합성 데이터셋",
+  "safety_note": "모든 사용자, 문서, 식별자, 일정, 로그, 취약점 및 임무정보는 연구를 위해 인위적으로 생성한 가상 자료이며 실제 군사정보와 무관하다.",
+  "split_policy": "개발용 dev 20%, 최종평가 test 80%. 다중턴 세션의 모든 Turn은 동일 split에 배치한다.",
+  "validation": {
+    "users": 12,
+    "documents": 120,
+    "protected_facts": 360,
+    "rules": 60,
+    "utilities": 360,
+    "temporary_authorizations": 6,
+    "scenarios": 440,
+    "dev": 88,
+    "test": 352,
+    "document_type_counts": {
+      "public_notice": 24,
+      "personnel_document": 24,
+      "operations_document": 24,
+      "security_log": 24,
+      "vulnerability_report": 24
+    },
+    "attack_counts": {
+      "none": 120,
+      "AT1": 40,
+      "AT2": 40,
+      "AT3": 40,
+      "AT4": 40,
+      "AT5": 40,
+      "AT6": 40,
+      "AT7": 40,
+      "AT8": 40
+    }
+  },
+  "scenario_version": "2.0",
+  "scenario_design_note": "AT7 및 AT8 질의에 목표 문서 식별자를 포함하여 검색 실패와 접근통제 실패를 분리하였다. AT8 누적 다중턴은 personnel, operations, security_log, vulnerability 네 영역을 균등하게 포함한다. 단일턴 질의는 normal, typo, abbreviation, ambiguous 표현 변형을 적용한다.",
+  "scenario_validation": {
+    "rows": 440,
+    "dev": 88,
+    "test": 352,
+    "attack_counts": {
+      "none": 120,
+      "AT1": 40,
+      "AT2": 40,
+      "AT3": 40,
+      "AT4": 40,
+      "AT5": 40,
+      "AT6": 40,
+      "AT7": 40,
+      "AT8": 40
+    },
+    "at7_domain_counts": {
+      "personnel": 10,
+      "operations": 10,
+      "security_log": 10,
+      "vulnerability": 10
+    },
+    "at8_cumulative_domain_counts": {
+      "personnel": 6,
+      "operations": 6,
+      "security_log": 6,
+      "vulnerability": 6
+    }
+  }
+}

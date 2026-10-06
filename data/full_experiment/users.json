@@ -1,0 +1,98 @@
+[
+  {
+    "user_id": "G01",
+    "role": "general_user",
+    "department": "administration",
+    "clearance": 0,
+    "mission": "NONE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "G02",
+    "role": "general_user",
+    "department": "administration",
+    "clearance": 0,
+    "mission": "NONE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "G03",
+    "role": "general_user",
+    "department": "administration",
+    "clearance": 0,
+    "mission": "NONE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "P01",
+    "role": "personnel_staff",
+    "department": "personnel",
+    "clearance": 1,
+    "mission": "ADMIN",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "P02",
+    "role": "personnel_staff",
+    "department": "personnel",
+    "clearance": 1,
+    "mission": "ADMIN",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "P03",
+    "role": "personnel_staff",
+    "department": "personnel",
+    "clearance": 1,
+    "mission": "ADMIN",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "O01",
+    "role": "operations_staff",
+    "department": "operations",
+    "clearance": 2,
+    "mission": "BLUE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "O02",
+    "role": "operations_staff",
+    "department": "operations",
+    "clearance": 2,
+    "mission": "BLUE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "O03",
+    "role": "operations_staff",
+    "department": "operations",
+    "clearance": 2,
+    "mission": "BLUE",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "S01",
+    "role": "security_admin",
+    "department": "security",
+    "clearance": 3,
+    "mission": "CYBER",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "S02",
+    "role": "security_admin",
+    "department": "security",
+    "clearance": 3,
+    "mission": "CYBER",
+    "temporary_authorization": false
+  },
+  {
+    "user_id": "S03",
+    "role": "security_admin",
+    "department": "security",
+    "clearance": 3,
+    "mission": "CYBER",
+    "temporary_authorization": false
+  }
+]
