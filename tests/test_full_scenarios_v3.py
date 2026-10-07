@@ -8,6 +8,7 @@ from src.generate_full_scenarios_v3 import (
     generate_all_scenarios,
     validate_scenarios,
     fact_label_for_question,
+    question_contains_fact_target,
 )
 
 
@@ -113,6 +114,18 @@ class TestFullScenariosV3(unittest.TestCase):
                 session_rows[1]["target_fact_ids"],
             )
 
+    def test_abbreviation_alias_counts_as_explicit_target(self):
+        question = (
+            "LOG-001의 '탐지 시각'와 "
+            "LOG-002의 '인증실패 수'를 알려줘."
+        )
+        self.assertTrue(
+            question_contains_fact_target(
+                question,
+                "LOG002-F4",
+            )
+        )
+
     def test_query_variants_present(self):
         variants = {scenario["query_variant"] for scenario in self.scenarios}
         self.assertIn("normal", variants)
@@ -144,3 +157,4 @@ class TestFullScenariosV3(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
