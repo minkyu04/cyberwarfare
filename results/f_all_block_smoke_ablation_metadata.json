@@ -1,0 +1,12 @@
+{
+  "ablation": "all-block",
+  "description": "Every protected candidate fact is removed instead of applying selective minimum-loss control.",
+  "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+  "split": "dev",
+  "smoke": true,
+  "allow_test": false,
+  "run_name": "f_all_block_smoke",
+  "checkpoint_every": 10,
+  "condition": "F",
+  "created_at_utc": "2026-10-07T23:57:41.225060+00:00"
+}
