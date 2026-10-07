@@ -1,0 +1,12 @@
+{
+  "ablation": "no-weight",
+  "description": "All candidate facts receive unit utility only during minimum-loss removal optimization. Evaluation retains the original business values.",
+  "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+  "split": "dev",
+  "smoke": true,
+  "allow_test": false,
+  "run_name": "f_no_weight_smoke",
+  "checkpoint_every": 10,
+  "condition": "F",
+  "created_at_utc": "2026-10-07T23:55:53.675551+00:00"
+}
