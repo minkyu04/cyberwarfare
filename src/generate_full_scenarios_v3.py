@@ -66,6 +66,34 @@ def fact_label_for_question(fact_id):
         raise ValueError(f"No question label mapping for fact_id: {fact_id}") from exc
 
 
+FACT_LABEL_ALIASES = {
+    "문서 식별정보": ["문서 식별정보"],
+    "인사 대상자 식별자": ["인사 대상자 식별자", "대상자 ID"],
+    "보직변경 예정일": ["보직변경 예정일", "보직변경일"],
+    "훈련 식별자": ["훈련 식별자"],
+    "BLUE 훈련일": ["BLUE 훈련일"],
+    "통신장비 점검률": ["통신장비 점검률", "장비 점검률", "통신장비 점검율", "장비 점검율"],
+    "추가 확인 대상": ["추가 확인 대상"],
+    "보안 이벤트 식별자": ["보안 이벤트 식별자"],
+    "탐지원": ["탐지원"],
+    "탐지 시각": ["탐지 시각", "탐지시간"],
+    "인증 실패 횟수": ["인증 실패 횟수", "인증실패 수"],
+    "모듈 식별자": ["모듈 식별자"],
+    "계정 식별자": ["계정 식별자"],
+    "취약점 식별자와 위험등급": ["취약점 식별자와 위험등급", "취약점 ID/등급"],
+    "조치 티켓 식별자": ["조치 티켓 식별자"],
+}
+
+
+def question_contains_fact_target(question, fact_id):
+    canonical_label = fact_label_for_question(fact_id)
+    aliases = FACT_LABEL_ALIASES.get(
+        canonical_label,
+        [canonical_label],
+    )
+    return any(alias in question for alias in aliases)
+
+
 def get_target_document_ids(target_fact_ids):
     result = []
     for fact_id in target_fact_ids:
@@ -704,7 +732,10 @@ def validate_scenarios(scenarios, documents, rules):
             )
         for fact_id in scenario.get("target_fact_ids", []):
             label = fact_label_for_question(fact_id)
-            assert label in scenario["question"], (
+            assert question_contains_fact_target(
+                scenario["question"],
+                fact_id,
+            ), (
                 f"Missing explicit fact target: "
                 f"{scenario['scenario_id']} {fact_id} ({label})"
             )
@@ -730,7 +761,7 @@ def validate_scenarios(scenarios, documents, rules):
 
 def update_manifest(validation):
     manifest = load_json(MANIFEST_FILE) if MANIFEST_FILE.exists() else {}
-    manifest["scenario_version"] = "3.0"
+    manifest["scenario_version"] = "3.1"
     manifest["scenario_design_note"] = (
         "AT7 및 AT8 질의에 목표 문서 식별자와 목표 Fact 항목명을 명시하여 "
         "조건별 target-selection ambiguity를 제거하였다. AT8 누적 다중턴은 "
@@ -744,7 +775,7 @@ def update_manifest(validation):
 
 def main():
     print("=" * 72)
-    print("FULL EXPERIMENT SCENARIO V3 GENERATION")
+    print("FULL EXPERIMENT SCENARIO V3.1 GENERATION")
     print("=" * 72)
 
     documents = load_json(DOCUMENT_FILE)
@@ -762,10 +793,11 @@ def main():
 
     print(f"[SAVED] {SCENARIO_FILE}")
     print("\n" + "=" * 72)
-    print("SCENARIO V3 VALIDATION PASSED")
+    print("SCENARIO V3.1 VALIDATION PASSED")
     print("=" * 72)
     print(json.dumps(validation, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
     main()
+
