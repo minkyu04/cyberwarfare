@@ -34,8 +34,8 @@
       "AT8": 40
     }
   },
-  "scenario_version": "2.0",
-  "scenario_design_note": "AT7 및 AT8 질의에 목표 문서 식별자를 포함하여 검색 실패와 접근통제 실패를 분리하였다. AT8 누적 다중턴은 personnel, operations, security_log, vulnerability 네 영역을 균등하게 포함한다. 단일턴 질의는 normal, typo, abbreviation, ambiguous 표현 변형을 적용한다.",
+  "scenario_version": "3.1",
+  "scenario_design_note": "AT7 및 AT8 질의에 목표 문서 식별자와 목표 Fact 항목명을 명시하여 조건별 target-selection ambiguity를 제거하였다. AT8 누적 다중턴은 각 턴에서 정확히 하나의 목표 Fact를 요청하며, revocation 시나리오는 권한 활성/만료 시점 모두 동일한 두 Fact를 명시적으로 재요청한다. 단일턴 질의는 normal, typo, abbreviation, ambiguous 표현 변형을 유지한다.",
   "scenario_validation": {
     "rows": 440,
     "dev": 88,
@@ -62,6 +62,7 @@
       "operations": 6,
       "security_log": 6,
       "vulnerability": 6
-    }
+    },
+    "at8_explicit_fact_targets": true
   }
 }

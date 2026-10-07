@@ -4,11 +4,11 @@ from collections import Counter
 from src.generate_full_scenarios_v3 import (
     DOCUMENT_FILE,
     RULE_FILE,
+    fact_label_for_question,
+    question_contains_fact_target,
     load_json,
     generate_all_scenarios,
     validate_scenarios,
-    fact_label_for_question,
-    question_contains_fact_target,
 )
 
 
@@ -31,11 +31,17 @@ class TestFullScenariosV3(unittest.TestCase):
     def test_attack_counts(self):
         counts = Counter(scenario["attack_type"] for scenario in self.scenarios)
         self.assertEqual(counts["none"], 120)
-        for attack_type in ["AT1", "AT2", "AT3", "AT4", "AT5", "AT6", "AT7", "AT8"]:
+        for attack_type in [
+            "AT1", "AT2", "AT3", "AT4",
+            "AT5", "AT6", "AT7", "AT8",
+        ]:
             self.assertEqual(counts[attack_type], 40)
 
     def test_target_documents_exist(self):
-        document_ids = {doc["document_id"] for doc in self.documents}
+        document_ids = {
+            doc["document_id"]
+            for doc in self.documents
+        }
         for scenario in self.scenarios:
             for document_id in scenario["target_document_ids"]:
                 self.assertIn(document_id, document_ids)
@@ -69,7 +75,13 @@ class TestFullScenariosV3(unittest.TestCase):
         for scenario in at7:
             for fact_id in scenario["target_fact_ids"]:
                 label = fact_label_for_question(fact_id)
-                self.assertIn(label, scenario["question"])
+                self.assertTrue(
+                    question_contains_fact_target(
+                        scenario["question"],
+                        fact_id,
+                    ),
+                    msg=f"{scenario['scenario_id']} missing {label}",
+                )
 
     def test_at8_has_explicit_fact_targets(self):
         at8 = [
@@ -80,7 +92,13 @@ class TestFullScenariosV3(unittest.TestCase):
         for scenario in at8:
             for fact_id in scenario["target_fact_ids"]:
                 label = fact_label_for_question(fact_id)
-                self.assertIn(label, scenario["question"])
+                self.assertTrue(
+                    question_contains_fact_target(
+                        scenario["question"],
+                        fact_id,
+                    ),
+                    msg=f"{scenario['scenario_id']} missing {label}",
+                )
 
     def test_at8_cumulative_one_target_per_turn(self):
         rows = [
@@ -89,6 +107,7 @@ class TestFullScenariosV3(unittest.TestCase):
             if scenario["scenario_type"] == "multiturn_cumulative"
         ]
         self.assertEqual(len(rows), 24)
+
         for scenario in rows:
             self.assertEqual(len(scenario["target_fact_ids"]), 1)
             self.assertEqual(
@@ -103,14 +122,32 @@ class TestFullScenariosV3(unittest.TestCase):
             if scenario["scenario_type"] == "revocation_multiturn"
         ]
         self.assertEqual(len(rows), 16)
+
         sessions = {}
         for scenario in rows:
-            sessions.setdefault(scenario["session_id"], []).append(scenario)
+            sessions.setdefault(
+                scenario["session_id"],
+                [],
+            ).append(scenario)
+
         self.assertEqual(len(sessions), 8)
+
         for session_rows in sessions.values():
-            session_rows = sorted(session_rows, key=lambda item: item["turn"])
+            session_rows = sorted(
+                session_rows,
+                key=lambda item: item["turn"],
+            )
+            self.assertEqual(len(session_rows), 2)
             self.assertEqual(
                 session_rows[0]["target_fact_ids"],
+                session_rows[1]["target_fact_ids"],
+            )
+            self.assertEqual(
+                session_rows[0]["forced_candidate_facts"],
+                session_rows[0]["target_fact_ids"],
+            )
+            self.assertEqual(
+                session_rows[1]["forced_candidate_facts"],
                 session_rows[1]["target_fact_ids"],
             )
 
@@ -127,7 +164,10 @@ class TestFullScenariosV3(unittest.TestCase):
         )
 
     def test_query_variants_present(self):
-        variants = {scenario["query_variant"] for scenario in self.scenarios}
+        variants = {
+            scenario["query_variant"]
+            for scenario in self.scenarios
+        }
         self.assertIn("normal", variants)
         self.assertIn("typo", variants)
         self.assertIn("abbreviation", variants)
@@ -145,16 +185,41 @@ class TestFullScenariosV3(unittest.TestCase):
         self.assertEqual(result["dev"], 88)
         self.assertEqual(result["test"], 352)
         self.assertTrue(result["at8_explicit_fact_targets"])
-        self.assertEqual(result["at7_domain_counts"]["personnel"], 10)
-        self.assertEqual(result["at7_domain_counts"]["operations"], 10)
-        self.assertEqual(result["at7_domain_counts"]["security_log"], 10)
-        self.assertEqual(result["at7_domain_counts"]["vulnerability"], 10)
-        self.assertEqual(result["at8_cumulative_domain_counts"]["personnel"], 6)
-        self.assertEqual(result["at8_cumulative_domain_counts"]["operations"], 6)
-        self.assertEqual(result["at8_cumulative_domain_counts"]["security_log"], 6)
-        self.assertEqual(result["at8_cumulative_domain_counts"]["vulnerability"], 6)
+
+        self.assertEqual(
+            result["at7_domain_counts"]["personnel"],
+            10,
+        )
+        self.assertEqual(
+            result["at7_domain_counts"]["operations"],
+            10,
+        )
+        self.assertEqual(
+            result["at7_domain_counts"]["security_log"],
+            10,
+        )
+        self.assertEqual(
+            result["at7_domain_counts"]["vulnerability"],
+            10,
+        )
+
+        self.assertEqual(
+            result["at8_cumulative_domain_counts"]["personnel"],
+            6,
+        )
+        self.assertEqual(
+            result["at8_cumulative_domain_counts"]["operations"],
+            6,
+        )
+        self.assertEqual(
+            result["at8_cumulative_domain_counts"]["security_log"],
+            6,
+        )
+        self.assertEqual(
+            result["at8_cumulative_domain_counts"]["vulnerability"],
+            6,
+        )
 
 
 if __name__ == "__main__":
     unittest.main()
-
