@@ -1,0 +1,26 @@
+{
+  "model_name": "Qwen/Qwen2.5-3B-Instruct",
+  "split": "test",
+  "conditions": [
+    "C",
+    "E",
+    "F"
+  ],
+  "attack_types": [
+    "AT7",
+    "AT8"
+  ],
+  "allow_test": true,
+  "run_name": "qwen25_3b_crossmodel_at7_at8_test",
+  "checkpoint_every": 10,
+  "original_scenario_count": 352,
+  "selected_scenario_count": 64,
+  "attack_counts": {
+    "AT7": 32,
+    "AT8": 32
+  },
+  "created_at_utc": "2026-10-08T04:36:28.760036+00:00",
+  "model_override_method": "src.weighted_controlled_rag.MODEL_NAME",
+  "scenario_filter_method": "FullExperimentRunner.scenarios filtered after initialization by attack_type",
+  "core_runner_modified": false
+}
