@@ -1,0 +1,2 @@
+﻿component_count,min_candidate_fact_count,max_candidate_fact_count,min_rule_count,max_rule_count,median_component_median_ms,p95_component_median_ms,max_component_median_ms,safety_preserved_rate
+48,2,3,1,2,0.017375,0.025029999999999993,0.0312,1.0

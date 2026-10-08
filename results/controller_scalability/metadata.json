@@ -1,0 +1,30 @@
+{
+  "analysis": "controller optimization kernel scalability benchmark",
+  "solver": "src.utility_sensitivity_analysis.solve_minimum_hitting_set",
+  "scope": "Exact minimum-weight hitting-set optimization only; retrieval, LLM generation, output guard, and network latency are excluded.",
+  "synthetic_sizes": [
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+  ],
+  "instances_per_size": 20,
+  "timing_repeats_per_instance": 10,
+  "actual_component_repeats": 100,
+  "rule_density": 1.5,
+  "seed": 42,
+  "synthetic_rule_structure": "Connected cycle plus randomly sampled overlapping 2-4 fact rules.",
+  "timing_method": "Python time.perf_counter_ns; case generation and warm-up are excluded.",
+  "interpretation_notes": [
+    "This benchmark measures only the exact minimum-loss optimization kernel.",
+    "Runtime depends on both candidate-fact count and forbidden-rule structure.",
+    "The synthetic benchmark is a controlled stress test and is not a deployment latency measurement.",
+    "The exact solver has exponential worst-case complexity; the empirical benchmark does not change that bound.",
+    "Actual-rule-component timings use the same 60-rule full experiment dataset."
+  ]
+}
