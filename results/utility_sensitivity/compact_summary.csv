@@ -1,0 +1,5 @@
+﻿perturbation_level,n_trials,safety_preserved_rate,exact_selection_agreement_rate,baseline_optimal_equivalent_rate,selection_changed_but_equivalent_rate,tie_resolution_event_rate,strict_rank_reversal_event_rate,mean_tie_resolution_pair_rate,mean_strict_rank_reversal_pair_rate,mean_baseline_regret_relative_total,mean_original_utility_retention
+0.1,48000,1.0,0.6264375,1.0,0.3735625,0.75,0.0,0.75,0.0,0.0,0.5568181818181819
+0.2,48000,1.0,0.6269166666666667,1.0,0.3730833333333333,0.75,0.0,0.75,0.0,0.0,0.5568181818181819
+0.3,48000,1.0,0.6245416666666667,1.0,0.37545833333333334,0.75,0.0,0.75,0.0,0.0,0.5568181818181819
+0.5,48000,1.0,0.62725,0.999625,0.372375,0.75,0.01575,0.75,0.00525,0.00017045454545454544,0.5566477272727274

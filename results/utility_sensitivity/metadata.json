@@ -1,0 +1,32 @@
+{
+  "analysis": "controller-level utility sensitivity",
+  "utility_file": "C:\\Users\\1\\cyberwarfare\\data\\full_experiment\\fact_utility.json",
+  "rule_file": "C:\\Users\\1\\cyberwarfare\\data\\full_experiment\\inference_rules.json",
+  "rule_count": 60,
+  "case_count": 48,
+  "utility_fact_count": 360,
+  "perturbation_levels": [
+    0.1,
+    0.2,
+    0.3,
+    0.5
+  ],
+  "repeats": 1000,
+  "seed": 42,
+  "perturbation_method": "Independent multiplicative uniform perturbation: w' = w * (1 + U[-level, level]).",
+  "optimization": "Exact minimum-weight hitting set for each connected component of overlapping inference rules.",
+  "tie_break": "Minimum cost, then minimum number of removals, then lexicographic fact ID order.",
+  "rank_metrics": {
+    "tie_resolution_event": "At least one pair with equal baseline utility becomes non-equal after perturbation.",
+    "strict_rank_reversal_event": "At least one pair with unequal baseline utility reverses its utility ordering after perturbation.",
+    "tie_resolution_pair_rate": "Fraction of baseline-tied fact pairs whose ties are resolved by perturbation.",
+    "strict_rank_reversal_pair_rate": "Fraction of strictly ordered baseline fact pairs whose ordering is reversed by perturbation."
+  },
+  "interpretation_notes": [
+    "This is a controller-level robustness analysis and does not rerun LLM generation.",
+    "Security constraints remain hard constraints. Utility perturbation changes only which facts are selected for removal.",
+    "baseline_optimal_equivalent counts alternative removal sets with the same original minimum cost as equivalent.",
+    "selection_changed_but_equivalent identifies runs where the selected fact IDs changed while the original minimum-loss objective value did not.",
+    "Reported 95 percent intervals summarize Monte Carlo perturbation-case observations and should not be interpreted as deployment-population confidence intervals."
+  ]
+}
