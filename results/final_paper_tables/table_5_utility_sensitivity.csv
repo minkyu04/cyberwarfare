@@ -1,0 +1,5 @@
+﻿Perturbation,Trials,Safety preserved,Exact selection agreement,Baseline-optimal equivalent,Changed but equivalent,Strict rank reversal,Mean rank-reversal pair rate,Mean baseline regret / total utility,Mean original utility retention
+±10%,48000,100.00%,62.64%,100.00%,37.36%,0.00%,0.00%,0.00%,55.68%
+±20%,48000,100.00%,62.69%,100.00%,37.31%,0.00%,0.00%,0.00%,55.68%
+±30%,48000,100.00%,62.45%,100.00%,37.55%,0.00%,0.00%,0.00%,55.68%
+±50%,48000,100.00%,62.72%,99.96%,37.24%,1.57%,0.53%,0.02%,55.66%

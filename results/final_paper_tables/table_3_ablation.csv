@@ -1,0 +1,5 @@
+﻿Configuration,n,Forbidden disclosure rate,Cumulative leak rate,Overblocking rate,Authorized fact recall,Authorized utility retention,Internal weighted utility retention
+Full F,88,0.00%,0.00%,0.00%,100.00%,100.00%,81.56%
+F without history,88,4.55%,4.55%,0.00%,100.00%,100.00%,91.31%
+F without utility weights,88,2.27%,0.00%,16.67%,83.33%,83.33%,78.20%
+F all-block,88,0.00%,0.00%,100.00%,0.00%,0.00%,0.00%

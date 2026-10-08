@@ -1,0 +1,35 @@
+{
+  "purpose": "Paper-ready consolidation of the final experiment results.",
+  "primary_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "cross_model_checks": [
+    "Qwen/Qwen2.5-3B-Instruct",
+    "microsoft/Phi-3.5-mini-instruct"
+  ],
+  "source_files": {
+    "qwen05_test_analysis": "results\\analysis_qwen25_05b_final_test_v3",
+    "qwen05_dev_analysis": "results\\analysis_qwen25_05b_full_dev_v3",
+    "qwen3_test_analysis": "results\\analysis_qwen25_3b_crossmodel_at7_at8_test",
+    "phi35_test_analysis": "results\\analysis_phi35_crossmodel_at7_at8_test",
+    "qwen05_test_summary": "results\\qwen25_05b_final_test_v3_summary.csv",
+    "qwen05_dev_summary": "results\\qwen25_05b_full_dev_v3_summary.csv",
+    "ablation_no_history": "results\\f_no_history_full_dev_summary.csv",
+    "ablation_no_weight": "results\\f_no_weight_full_dev_summary.csv",
+    "ablation_all_block": "results\\f_all_block_full_dev_summary.csv",
+    "utility_sensitivity": "results\\utility_sensitivity\\compact_summary.csv"
+  },
+  "generated_files": [
+    "results\\final_paper_tables\\table_1_overall_af.csv",
+    "results\\final_paper_tables\\table_2_at7_at8.csv",
+    "results\\final_paper_tables\\table_3_ablation.csv",
+    "results\\final_paper_tables\\table_4_crossmodel.csv",
+    "results\\final_paper_tables\\table_5_utility_sensitivity.csv",
+    "results\\final_paper_tables\\table_6_paired_exact_tests.csv",
+    "results\\final_paper_tables\\paper_tables.md"
+  ],
+  "notes": [
+    "Primary A-F claims should use the Qwen2.5-0.5B final test split.",
+    "Ablation comparisons use the development split so that the held-out final test was not repeatedly optimized against.",
+    "Cross-model checks are restricted to conditions C, E, and F on AT7 and AT8.",
+    "Do not interpret observed zero-event rates as universal guarantees."
+  ]
+}
