@@ -1,0 +1,18 @@
+{
+  "model_name": "Qwen/Qwen2.5-0.5B-Instruct",
+  "split": "dev",
+  "conditions": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "smoke": false,
+  "allow_test": false,
+  "run_name": "qwen25_05b_full_dev_v3",
+  "checkpoint_every": 10,
+  "created_at_utc": "2026-10-08T00:01:59.101216+00:00",
+  "model_override_method": "src.weighted_controlled_rag.MODEL_NAME"
+}
