@@ -1,0 +1,16 @@
+﻿metric,condition_a,condition_b,paired_n,a0_b1,a1_b0,exact_two_sided_p
+unauthorized_evidence_emission_event,C,E,88,0,5,0.0625
+unauthorized_evidence_emission_event,C,F,88,0,5,0.0625
+unauthorized_evidence_emission_event,E,F,88,0,0,1.0
+unauthorized_retrieval_exposure_event,C,E,88,0,0,1.0
+unauthorized_retrieval_exposure_event,C,F,88,0,0,1.0
+unauthorized_retrieval_exposure_event,E,F,88,0,0,1.0
+forbidden_disclosure_event,C,E,88,0,0,1.0
+forbidden_disclosure_event,C,F,88,0,10,0.001953125
+forbidden_disclosure_event,E,F,88,0,10,0.001953125
+single_turn_combination_violation_event,C,E,8,0,0,1.0
+single_turn_combination_violation_event,C,F,8,0,6,0.03125
+single_turn_combination_violation_event,E,F,8,0,6,0.03125
+cross_turn_cumulative_leakage_event,C,E,4,0,0,1.0
+cross_turn_cumulative_leakage_event,C,F,4,0,4,0.125
+cross_turn_cumulative_leakage_event,E,F,4,0,4,0.125
